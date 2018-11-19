@@ -23,7 +23,6 @@ class GesturesViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
        navigationItem.leftBarButtonItem = editButtonItem
   
-        // Set up views if editing an existing Meal.
     }
 
     // MARK: - Table view data source
@@ -120,21 +119,21 @@ class GesturesViewController: UITableViewController {
     }
     
     @IBAction func saveGestureDetail(_ segue: UIStoryboardSegue) {
-        
-        if let gestureDetailsViewController = segue.source as? GestureDetailsViewController,
-            let gesture = gestureDetailsViewController.gesture {
-     
+        if let gestureDetailsViewController = segue.source as? GestureDetailsViewController {
+            if let gesture = gestureDetailsViewController.gesture {
+    
                 if let selectedIndexPath = tableView.indexPathForSelectedRow {
-                    // Update an existing meal.
+                    // Update an existing gesture.
                     gestures[selectedIndexPath.row] = gesture
                     tableView.reloadRows(at: [selectedIndexPath], with: .none)
                 }
                 else {
-                    // Add a new meal.
+                    // Add a new gesture.
                     let newIndexPath = IndexPath(row: gestures.count, section: 0)
                     
                     gestures.append(gesture)
                     tableView.insertRows(at: [newIndexPath], with: .automatic)
+                    self.tableView.reloadData()
             }
         }
     }
@@ -148,7 +147,9 @@ class GesturesViewController: UITableViewController {
 //        tableView.insertRows(at: [indexPath], with: .automatic)
 //    }
     
+    }
 }
+    
 
 
 extension GesturesViewController{
@@ -169,8 +170,15 @@ extension GesturesViewController{
         // Configure the cell...
 
         let gesture = gestures[indexPath.row]
-        cell.textLabel?.text = gesture.name
-        cell.detailTextLabel?.text = gesture.sensor
+        
+        if let name = gesture.name,
+            let sensor = gesture.sensor{
+            cell.textLabel?.text = name //gesture.value(forKeyPath: "name") as? String
+            cell.detailTextLabel?.text = sensor//gesture.value(forKeyPath: "sensor") as? String//gesture.sensor
+            return cell
+        }
+        
+        self.tableView.reloadData()
         return cell
     }
 

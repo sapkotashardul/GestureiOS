@@ -9,6 +9,7 @@
 import UIKit
 import os.log
 import CoreMotion
+import CoreData
 
 class GestureDetailsViewController: UITableViewController, UITextFieldDelegate {
     
@@ -85,8 +86,37 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate {
         
         let gestureName = nameTextField.text ?? ""
         
-        gesture = Gesture(name: gestureName, sensor: detailLabel.text)
+        save(gestureName: gestureName, gestureSensor: detailLabel.text ?? "")
+        
+    }
     
+    func save(gestureName: String, gestureSensor: String){
+        // 1
+        guard let appDelegate =
+            UIApplication.shared.delegate as? AppDelegate else {
+                return
+        }
+        
+        let managedContext =
+            appDelegate.persistentContainer.viewContext
+        
+        // 2
+        let entity =
+            NSEntityDescription.entity(forEntityName: "Gesture",
+                                       in: managedContext)!
+        
+        self.gesture = Gesture(entity: entity,
+                               insertInto: managedContext)
+        
+        self.gesture?.name = gestureName
+        self.gesture?.sensor = gestureSensor
+        
+        do {
+            try managedContext.save()
+            
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+        }
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {

@@ -6,10 +6,13 @@
 //  Copyright © 2018 fluid. All rights reserved.
 //
 
+import UIKit
+import CoreData
 import Foundation
 
-struct Gesture{
+class GestureMO: NSManagedObject{
     
-    var name: String?
-    var sensor: String?
+    @NSManaged var name: String?
+    @NSManaged var sensor: String?
+
 }

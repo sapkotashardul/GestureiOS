@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0007EA4D21978EA3006433E7 /* GestureTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0007EA4C21978EA3006433E7 /* GestureTableViewCell.swift */; };
 		0007EA51219CC800006433E7 /* StoreSensorData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0007EA50219CC7FF006433E7 /* StoreSensorData.swift */; };
-		00955D7F2194DEBF00CC0469 /* Gestures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00955D7E2194DEBF00CC0469 /* Gestures.swift */; };
 		00955D812194DF2600CC0469 /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00955D802194DF2600CC0469 /* SampleData.swift */; };
 		00955D832194E7C000CC0469 /* GesturesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00955D822194E7C000CC0469 /* GesturesViewController.swift */; };
 		00955D852194F15300CC0469 /* GestureDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00955D842194F15300CC0469 /* GestureDetailsViewController.swift */; };
@@ -21,6 +20,8 @@
 		00CD72922194CEAC0063DC56 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 00CD72902194CEAC0063DC56 /* LaunchScreen.storyboard */; };
 		00CD729D2194CEAC0063DC56 /* GestureiOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CD729C2194CEAC0063DC56 /* GestureiOSTests.swift */; };
 		00CD72A82194CEAC0063DC56 /* GestureiOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CD72A72194CEAC0063DC56 /* GestureiOSUITests.swift */; };
+		00F9851B21A20C600063D780 /* Gesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F9851921A20C5F0063D780 /* Gesture.swift */; };
+		00F9851C21A20C600063D780 /* Gesture+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F9851A21A20C5F0063D780 /* Gesture+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,7 +44,6 @@
 /* Begin PBXFileReference section */
 		0007EA4C21978EA3006433E7 /* GestureTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureTableViewCell.swift; sourceTree = "<group>"; };
 		0007EA50219CC7FF006433E7 /* StoreSensorData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreSensorData.swift; sourceTree = "<group>"; };
-		00955D7E2194DEBF00CC0469 /* Gestures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gestures.swift; sourceTree = "<group>"; };
 		00955D802194DF2600CC0469 /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
 		00955D822194E7C000CC0469 /* GesturesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GesturesViewController.swift; sourceTree = "<group>"; };
 		00955D842194F15300CC0469 /* GestureDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureDetailsViewController.swift; sourceTree = "<group>"; };
@@ -61,6 +61,8 @@
 		00CD72A32194CEAC0063DC56 /* GestureiOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GestureiOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00CD72A72194CEAC0063DC56 /* GestureiOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureiOSUITests.swift; sourceTree = "<group>"; };
 		00CD72A92194CEAC0063DC56 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		00F9851921A20C5F0063D780 /* Gesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gesture.swift; sourceTree = "<group>"; };
+		00F9851A21A20C5F0063D780 /* Gesture+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Gesture+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,17 +113,18 @@
 		00CD72832194CEA10063DC56 /* GestureiOS */ = {
 			isa = PBXGroup;
 			children = (
+				00F9851921A20C5F0063D780 /* Gesture.swift */,
+				00F9851A21A20C5F0063D780 /* Gesture+CoreDataProperties.swift */,
+				00955D842194F15300CC0469 /* GestureDetailsViewController.swift */,
 				00955D822194E7C000CC0469 /* GesturesViewController.swift */,
 				00CD72842194CEA10063DC56 /* AppDelegate.swift */,
 				00CD72882194CEA10063DC56 /* Main.storyboard */,
 				0007EA4C21978EA3006433E7 /* GestureTableViewCell.swift */,
-				00955D7E2194DEBF00CC0469 /* Gestures.swift */,
 				00955D802194DF2600CC0469 /* SampleData.swift */,
 				00CD728E2194CEAC0063DC56 /* Assets.xcassets */,
 				00CD72902194CEAC0063DC56 /* LaunchScreen.storyboard */,
 				00CD72932194CEAC0063DC56 /* Info.plist */,
 				00CD728B2194CEA10063DC56 /* GestureiOS.xcdatamodeld */,
-				00955D842194F15300CC0469 /* GestureDetailsViewController.swift */,
 				00955D86219765BC00CC0469 /* SensorPickerViewController.swift */,
 				0007EA50219CC7FF006433E7 /* StoreSensorData.swift */,
 			);
@@ -280,7 +283,8 @@
 				00955D812194DF2600CC0469 /* SampleData.swift in Sources */,
 				00955D852194F15300CC0469 /* GestureDetailsViewController.swift in Sources */,
 				00955D832194E7C000CC0469 /* GesturesViewController.swift in Sources */,
-				00955D7F2194DEBF00CC0469 /* Gestures.swift in Sources */,
+				00F9851B21A20C600063D780 /* Gesture.swift in Sources */,
+				00F9851C21A20C600063D780 /* Gesture+CoreDataProperties.swift in Sources */,
 				00955D87219765BC00CC0469 /* SensorPickerViewController.swift in Sources */,
 				00CD72852194CEA10063DC56 /* AppDelegate.swift in Sources */,
 				0007EA51219CC800006433E7 /* StoreSensorData.swift in Sources */,
