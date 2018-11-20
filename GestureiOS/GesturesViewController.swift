@@ -10,9 +10,11 @@ import UIKit
 import CoreData
 import os.log
 
-
+//Need to save and then check why it is crashing
 
 class GesturesViewController: UITableViewController {
+    
+    var gestures = [Gesture]() //SampleData.generateGesturesData()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,12 +26,32 @@ class GesturesViewController: UITableViewController {
        navigationItem.leftBarButtonItem = editButtonItem
   
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        //1
+        guard let appDelegate =
+            UIApplication.shared.delegate as? AppDelegate else {
+                return
+        }
+        
+        let managedContext =
+            appDelegate.persistentContainer.viewContext
+        
+        //2
+        let fetchRequest =
+            NSFetchRequest<NSManagedObject>(entityName: "Gesture")
+        
+        //3
+        do {
+            gestures = try managedContext.fetch(fetchRequest) as! [Gesture]
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
+    }
 
     // MARK: - Table view data source
-    
-    var gestures = [Gesture]() //SampleData.generateGesturesData()
-    //var gestures: [NSManagedObject] = []//[Gesture]() //SampleData.generateGesturesData()
-    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -62,9 +84,29 @@ class GesturesViewController: UITableViewController {
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
+            //Delete from CoreData
+            
+            guard let appDelegate =
+                UIApplication.shared.delegate as? AppDelegate else {
+                    return
+            }
+            
+            let managedContext =
+                appDelegate.persistentContainer.viewContext
+            
+            managedContext.delete(gestures[indexPath.row] as NSManagedObject)
+            
             // Delete the row from the data source
             gestures.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
+            
+            do {
+                try managedContext.save()
+                
+            } catch let error as NSError {
+                print("Could not save. \(error), \(error.userInfo)")
+            }
+                        
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }
@@ -178,7 +220,7 @@ extension GesturesViewController{
             return cell
         }
         
-        self.tableView.reloadData()
+        //self.tableView.reloadData()
         return cell
     }
 

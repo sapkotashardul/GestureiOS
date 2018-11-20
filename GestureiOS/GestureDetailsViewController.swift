@@ -16,7 +16,7 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate {
     var gesture: Gesture?
     let motion = CMMotionManager()
     var timer: Timer = Timer()
-
+    var flag = true
     
     var sensor: String = "Accelerometer" {
         didSet {
@@ -40,7 +40,11 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate {
             navigationItem.title = gesture.name
             nameTextField.text = gesture.name
             detailLabel.text = gesture.sensor
+            self.flag = false
         }
+        
+        print("I am here")
+        print(gesture?.name)
         
         updateSaveButtonState()
         
@@ -87,7 +91,6 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate {
         let gestureName = nameTextField.text ?? ""
         
         save(gestureName: gestureName, gestureSensor: detailLabel.text ?? "")
-        
     }
     
     func save(gestureName: String, gestureSensor: String){
@@ -100,6 +103,7 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate {
         let managedContext =
             appDelegate.persistentContainer.viewContext
         
+        if self.flag{
         // 2
         let entity =
             NSEntityDescription.entity(forEntityName: "Gesture",
@@ -110,6 +114,18 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate {
         
         self.gesture?.name = gestureName
         self.gesture?.sensor = gestureSensor
+        }
+        else{
+        if let id = self.gesture?.objectID {
+            do{
+            try self.gesture = managedContext.existingObject(with: id) as? Gesture
+                self.gesture?.name = gestureName
+                self.gesture?.sensor = gestureSensor
+            } catch {
+                print("Error loading and editing existing CoreData object")
+            }
+            }
+        }
         
         do {
             try managedContext.save()
