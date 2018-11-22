@@ -18,7 +18,7 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate {
     var timer: Timer = Timer()
     var flag = true
     var sensorData = [String]()
-    var sampleFileNames = [String]()
+    var sampleFileNames: [String] = ["TestData"]//[String]()
 
     
     var sensor: String = "Accelerometer" {
@@ -38,17 +38,18 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate {
     
     @IBOutlet weak var sampleTableView: UITableView!
     
+    var dataSource = DynamicDataSource()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-   
+        sampleTableView.dataSource = dataSource
+        sampleTableView.delegate = dataSource
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         nameTextField.delegate = self
-        
         if let gesture = gesture{
             navigationItem.title = gesture.name
             nameTextField.text = gesture.name
@@ -56,19 +57,20 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate {
             self.flag = false
         }
         
+        
         updateSaveButtonState()
         
         self.hideKeyboardWhenTappedAround()
         
-        self.sampleTableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+//        self.sampleTableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         
     }
     
-    // MARK: - Initializers
-    required init?(coder aDecoder: NSCoder) {
-        print("init GestureDetailsViewController")
-        super.init(coder: aDecoder)
-    }
+//    // MARK: - Initializers
+//    required init?(coder aDecoder: NSCoder) {
+//        print("init GestureDetailsViewController")
+//        super.init(coder: aDecoder)
+//    }
     
     deinit {
         print("deinit GestureDetailsViewController")
@@ -208,12 +210,14 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate {
                                                 return
                                         }
                                         
+                                        self.sampleFileNames = self.dataSource.getData()
                                         let newIndexPath = IndexPath(row: self.sampleFileNames.count, section: 0)
                                         self.sampleFileNames.append(nameToSave)
+                                        self.dataSource.setData(sampleFileNames: self.sampleFileNames)
                                         print("name of file", nameToSave)
                                         self.sampleTableView.beginUpdates()
                                         self.sampleTableView.insertRows(at: [newIndexPath], with: .automatic)
-                                        self.sampleTableView.reloadData()
+                                        //self.sampleTableView.reloadData()
                                         self.sampleTableView.endUpdates()   
                                         //self.tableView.reloadData()
         }
@@ -273,21 +277,6 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate {
                                             //print(x,y,z)
                                             
                                             self.sensorData.append("\(x) \(y) \(z)")
-
-                                            
-                                            // Use the accelerometer data in your app.
-//                                            self.xLabel.text = x.description
-//                                            self.yLabel.text = y.description
-//                                            self.zLabel.text = z.description
-                                            
-//                                            self.xAvg = Int(Double(self.xAvg) * 0.999 + Double(x) * 0.001)
-//                                            self.yAvg = Int(Double(self.yAvg) * 0.999 + Double(y) * 0.001)
-//                                            self.zAvg = Int(Double(self.zAvg) * 0.999 + Double(z) * 0.001)
-                                            //                            print(self.xAvg, self.yAvg, self.zAvg)
-
-//                                            self.xPrev = x
-//                                            self.yPrev = y
-//                                            self.zPrev = z
                                         }
                     })
                     
@@ -446,43 +435,43 @@ extension GestureDetailsViewController {
 }
 
 
-extension GestureDetailsViewController{
-    func tableView(tableView: UITableView!, didSelectRowAtIndexPath indexPath: NSIndexPath!) {
-        
-    }
-    
-    func tableView(tableView: UITableView!, numberOfRowsInSection section: Int) -> Int {
-        if tableView == sampleTableView {
-            return self.sampleFileNames.count;
-        }
-        return 0
-    }
-    
-    func tableView(tableView: UITableView!, cellForRowAtIndexPath indexPath: IndexPath!) -> UITableViewCell! {
-        
-        let cellIdentifier = "Cell"
-        
-        
-        guard let cell = sampleTableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? UITableViewCell  else {
-                fatalError("The dequeued cell is not an instance of TableViewCell.")
-        }
-            
-        cell.textLabel?.text = String(self.sampleFileNames[indexPath.row])
-        print("Got the file name as ", cell.textLabel?.text)
-        return cell
-    }
-    
-    // Override to support editing the table view.
-    func tableView(tableView: UITableView!, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            sampleFileNames.remove(at: indexPath.row)
-            sampleTableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }
-    }
-
-}
+//extension GestureDetailsViewController{
+//    func tableView(tableView: UITableView!, didSelectRowAtIndexPath indexPath: NSIndexPath!) {
+//
+//    }
+//
+//    func tableView(tableView: UITableView!, numberOfRowsInSection section: Int) -> Int {
+//        if tableView == sampleTableView {
+//            return self.sampleFileNames.count;
+//        }
+//        return 0
+//    }
+//
+//    func tableView(tableView: UITableView!, cellForRowAtIndexPath indexPath: IndexPath!) -> UITableViewCell! {
+//
+//        let cellIdentifier = "Cell"
+//
+//
+//        guard let cell = sampleTableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? UITableViewCell  else {
+//                fatalError("The dequeued cell is not an instance of TableViewCell.")
+//        }
+//
+//        cell.textLabel?.text = String(self.sampleFileNames[indexPath.row])
+//        print("Got the file name as ", cell.textLabel?.text)
+//        return cell
+//    }
+//
+//    // Override to support editing the table view.
+//    func tableView(tableView: UITableView!, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+//        if editingStyle == .delete {
+//            sampleFileNames.remove(at: indexPath.row)
+//            sampleTableView.deleteRows(at: [indexPath], with: .fade)
+//        } else if editingStyle == .insert {
+//            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+//        }
+//    }
+//
+//}
 
 //extension GestureDetailsViewController{
 //

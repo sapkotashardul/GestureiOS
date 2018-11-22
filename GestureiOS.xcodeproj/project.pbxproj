@@ -22,6 +22,7 @@
 		00CD72A82194CEAC0063DC56 /* GestureiOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CD72A72194CEAC0063DC56 /* GestureiOSUITests.swift */; };
 		00F9851B21A20C600063D780 /* Gesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F9851921A20C5F0063D780 /* Gesture.swift */; };
 		00F9851C21A20C600063D780 /* Gesture+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F9851A21A20C5F0063D780 /* Gesture+CoreDataProperties.swift */; };
+		00F9852421A51F580063D780 /* DynamicDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F9852321A51F580063D780 /* DynamicDataSource.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		00CD72A92194CEAC0063DC56 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00F9851921A20C5F0063D780 /* Gesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gesture.swift; sourceTree = "<group>"; };
 		00F9851A21A20C5F0063D780 /* Gesture+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Gesture+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		00F9852321A51F580063D780 /* DynamicDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicDataSource.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +129,7 @@
 				00CD728B2194CEA10063DC56 /* GestureiOS.xcdatamodeld */,
 				00955D86219765BC00CC0469 /* SensorPickerViewController.swift */,
 				0007EA50219CC7FF006433E7 /* StoreSensorData.swift */,
+				00F9852321A51F580063D780 /* DynamicDataSource.swift */,
 			);
 			path = GestureiOS;
 			sourceTree = "<group>";
@@ -280,6 +283,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00F9852421A51F580063D780 /* DynamicDataSource.swift in Sources */,
 				00955D812194DF2600CC0469 /* SampleData.swift in Sources */,
 				00955D852194F15300CC0469 /* GestureDetailsViewController.swift in Sources */,
 				00955D832194E7C000CC0469 /* GesturesViewController.swift in Sources */,
