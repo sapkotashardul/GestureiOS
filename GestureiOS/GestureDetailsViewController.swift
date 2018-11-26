@@ -10,6 +10,8 @@ import UIKit
 import os.log
 import CoreMotion
 import CoreData
+import MessageUI
+
 
 class GestureDetailsViewController: UITableViewController, UITextFieldDelegate {
     
@@ -19,7 +21,8 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate {
     var flag = true
     var sensorData = [String]()
     var sampleFileNames: [String] = ["TestData"]//[String]()
-
+    var nameToSave: String = ""
+    var fileNameCount: [String: Int] = [:]
     
     var sensor: String = "Accelerometer" {
         didSet {
@@ -54,6 +57,10 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate {
             navigationItem.title = gesture.name
             nameTextField.text = gesture.name
             detailLabel.text = gesture.sensor
+            self.sampleFileNames = gesture.fileName ?? []
+            self.fileNameCount = gesture.uniqueFileCount ?? [:]
+            self.dataSource.setData(sampleFileNames: self.sampleFileNames)
+            self.dataSource.setCount(fileDict: self.fileNameCount)
             self.flag = false
         }
         
@@ -62,15 +69,8 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate {
         
         self.hideKeyboardWhenTappedAround()
         
-//        self.sampleTableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-        
     }
     
-//    // MARK: - Initializers
-//    required init?(coder aDecoder: NSCoder) {
-//        print("init GestureDetailsViewController")
-//        super.init(coder: aDecoder)
-//    }
     
     deinit {
         print("deinit GestureDetailsViewController")
@@ -79,10 +79,6 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate {
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)  {
-//        if segue.identifier == "SaveGestureDetail",
-//            let gestureName = nameTextField.text {
-//            gesture = Gesture(name: gestureName, sensor: sensor)
-//        }
         if segue.identifier == "PickSensor",
             let sensorPickerViewController = segue.destination as? SensorPickerViewController {
             sensorPickerViewController.selectedSensor = detailLabel.text //sensor
@@ -98,10 +94,10 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate {
         
         let gestureName = nameTextField.text ?? ""
         
-        save(gestureName: gestureName, gestureSensor: detailLabel.text ?? "")
+        save(gestureName: gestureName, gestureSensor: detailLabel.text ?? "", gestureFiles: self.dataSource.getData(), gestureFileCount: self.dataSource.getCount())
     }
     
-    func save(gestureName: String, gestureSensor: String){
+    func save(gestureName: String, gestureSensor: String, gestureFiles: [String], gestureFileCount: [String: Int]){
         // 1
         guard let appDelegate =
             UIApplication.shared.delegate as? AppDelegate else {
@@ -122,6 +118,9 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate {
         
         self.gesture?.name = gestureName
         self.gesture?.sensor = gestureSensor
+        self.gesture?.fileName = gestureFiles
+        self.gesture?.uniqueFileCount = gestureFileCount
+            
         }
         else{
         if let id = self.gesture?.objectID {
@@ -129,6 +128,8 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate {
             try self.gesture = managedContext.existingObject(with: id) as? Gesture
                 self.gesture?.name = gestureName
                 self.gesture?.sensor = gestureSensor
+                self.gesture?.fileName = gestureFiles
+                self.gesture?.uniqueFileCount = gestureFileCount
             } catch {
                 print("Error loading and editing existing CoreData object")
             }
@@ -160,13 +161,26 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate {
         return true
     }
     
+    
+    func saveToFile(fileName: String, stringToWrite: [String]){
+        let fileManager = FileManager.default
+        do {
+            let documentDirectory = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor:nil, create: true)
+            let fileURL = documentDirectory.appendingPathComponent(fileName).appendingPathExtension("txt")
+            print("File Path: \(fileURL.path)")
+            
+            let stringToWrite = stringToWrite.joined(separator: "\n")
+            try stringToWrite.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)
+            
+        } catch {
+            print(error)
+        }
+        
+    }
+    
 
     @IBAction func addSample(_ sender: Any) {
-        // 1.
-//        var usernameTextField: UITextField?
-//        var passwordTextField: UITextField?
-        
-        // 2.
+
         let firstAlertController = UIAlertController(
             title: "Add a Sample",
             message: "Start sampling your data below",
@@ -183,45 +197,51 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate {
             message: "Enter the recording label",
             preferredStyle: UIAlertController.Style.alert)
         
-//        // 3.
-//        let loginAction = UIAlertAction(
-//        title: "Log in", style: UIAlertAction.Style.default) {
-//            (action) -> Void in
-//
-//            if let username = usernameTextField?.text {
-//                print(" Username = \(username)")
-//            } else {
-//                print("No Username entered")
-//            }
-//
-//            if let password = passwordTextField?.text {
-//                print("Password = \(password)")
-//            } else {
-//                print("No password entered")
-//            }
-//        }
-        
         let saveAction = UIAlertAction(title: "Save",
                                        style: .default) {
                                         [unowned self] action in
                                         
-                                    guard let textField = thirdAlertController.textFields?.first,
-                                            let nameToSave = textField.text else {
+                                        guard let textField = thirdAlertController.textFields?.first
+                                        else {
                                                 return
-                                        }
+                                            }
+                                        self.nameToSave = textField.text as! String
+                                        
                                         
                                         self.sampleFileNames = self.dataSource.getData()
+                                        self.fileNameCount = self.dataSource.getCount()
                                         let newIndexPath = IndexPath(row: self.sampleFileNames.count, section: 0)
-                                        self.sampleFileNames.append(nameToSave)
+                                        
+                                        //make filename unique
+                                        
+                                        if self.sampleFileNames.contains(self.nameToSave){
+                                            if self.fileNameCount[self.nameToSave] == nil {
+                                                self.fileNameCount[self.nameToSave] = 1
+                                            } else {
+                                                if let count = self.fileNameCount[self.nameToSave]
+                                                {
+                                                    self.fileNameCount[self.nameToSave] = count + 1
+                                                }
+                                            }
+                                            if let count = self.fileNameCount[self.nameToSave]{
+                                                self.nameToSave = self.nameToSave + "-\(count)"
+                                            }
+                                        }
+                                        
+                                        self.sampleFileNames.append(self.nameToSave)
+                                        
                                         self.dataSource.setData(sampleFileNames: self.sampleFileNames)
-                                        print("name of file", nameToSave)
+                                        self.dataSource.setCount(fileDict: self.fileNameCount)
+                                        print("name of file", self.nameToSave)
+                                        
+                                        self.saveToFile(fileName: self.nameToSave, stringToWrite: self.sensorData)
+                                        self.sensorData = []
+                                        
                                         self.sampleTableView.beginUpdates()
                                         self.sampleTableView.insertRows(at: [newIndexPath], with: .automatic)
-                                        //self.sampleTableView.reloadData()
-                                        self.sampleTableView.endUpdates()   
-                                        //self.tableView.reloadData()
-        }
-                                        
+                                        self.sampleTableView.endUpdates()
+                                    }
+        
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         
         thirdAlertController.addTextField()
@@ -239,8 +259,7 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate {
                 //create a third alert view here to get the file name and save it
             
                 self.present(thirdAlertController, animated: true, completion: nil)
-                self.sensorData = []
-                
+                //self.sensorData = []
                 //save the .txt file here and update the table view row
         }))
         
@@ -297,34 +316,8 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate {
             print("CANCEL")
         }))
 
-        
-//        // 4.
-//        alertController.addTextField {
-//            (txtUsername) -> Void in
-//            usernameTextField = txtUsername
-//            usernameTextField!.placeholder = "<Your username here>"
-//        }
-//
-//        alertController.addTextField {
-//            (txtPassword) -> Void in
-//            passwordTextField = txtPassword
-//            passwordTextField!.isSecureTextEntry = true
-//            passwordTextField!.placeholder = "<Your password here>"
-//        }
-        
-        // 5.
-        //alertController.addAction(loginAction)
         self.present(firstAlertController, animated: true)//, completion: nil)
     }
-    
-//    @IBAction func showAlertButtonTapped(_ sender: UIButton) {
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let myAlert = storyboard.instantiateViewController(withIdentifier: "alert")
-//        myAlert.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
-//        myAlert.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
-//        self.present(myAlert, animated: true, completion: nil)
-//    }
-    
     
     @IBAction func unwindWithSelectedSensor(segue: UIStoryboardSegue) {
         if let sensorPickerViewController = segue.source as? SensorPickerViewController,
@@ -333,72 +326,6 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate {
         }
         
     }
-    // MARK: - Table view data source
-
-//    override func numberOfSections(in tableView: UITableView) -> Int {
-//        // #warning Incomplete implementation, return the number of sections
-//        return 0
-//    }
-//
-//    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        // #warning Incomplete implementation, return the number of rows
-//        return 0
-//    }
-
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
-        return cell
-    }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
     
     
     private func updateSaveButtonState() {
@@ -435,91 +362,7 @@ extension GestureDetailsViewController {
 }
 
 
-//extension GestureDetailsViewController{
-//    func tableView(tableView: UITableView!, didSelectRowAtIndexPath indexPath: NSIndexPath!) {
-//
-//    }
-//
-//    func tableView(tableView: UITableView!, numberOfRowsInSection section: Int) -> Int {
-//        if tableView == sampleTableView {
-//            return self.sampleFileNames.count;
-//        }
-//        return 0
-//    }
-//
-//    func tableView(tableView: UITableView!, cellForRowAtIndexPath indexPath: IndexPath!) -> UITableViewCell! {
-//
-//        let cellIdentifier = "Cell"
-//
-//
-//        guard let cell = sampleTableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? UITableViewCell  else {
-//                fatalError("The dequeued cell is not an instance of TableViewCell.")
-//        }
-//
-//        cell.textLabel?.text = String(self.sampleFileNames[indexPath.row])
-//        print("Got the file name as ", cell.textLabel?.text)
-//        return cell
-//    }
-//
-//    // Override to support editing the table view.
-//    func tableView(tableView: UITableView!, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-//        if editingStyle == .delete {
-//            sampleFileNames.remove(at: indexPath.row)
-//            sampleTableView.deleteRows(at: [indexPath], with: .fade)
-//        } else if editingStyle == .insert {
-//            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-//        }
-//    }
-//
-//}
-
-//extension GestureDetailsViewController{
-//
-//    func numberOfSections(in tableView: UITableView) -> Int {
-//        // #warning Incomplete implementation, return the number of sections
-//        return 1
-//    }
-//
-//
-//    // Override to support conditional editing of the table view.
-//    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-//        // Return false if you do not want the specified item to be editable.
-//        return true
-//    }
-//
-//
-//    // Override to support editing the table view.
-//    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-//        if editingStyle == .delete {
-//            //Delete from CoreData
-//
-//            guard let appDelegate =
-//                UIApplication.shared.delegate as? AppDelegate else {
-//                    return
-//            }
-//
-//            let managedContext =
-//                appDelegate.persistentContainer.viewContext
-//
-//            managedContext.delete(gestures[indexPath.row] as NSManagedObject)
-//
-//            // Delete the row from the data source
-//            gestures.remove(at: indexPath.row)
-//            tableView.deleteRows(at: [indexPath], with: .fade)
-//
-//            do {
-//                try managedContext.save()
-//
-//            } catch let error as NSError {
-//                print("Could not save. \(error), \(error.userInfo)")
-//            }
-//
-//        } else if editingStyle == .insert {
-//            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-//        }
-//    }
-//
-//
-//
-//}
-//
+extension GestureDetailsViewController{
+    
+    
+}

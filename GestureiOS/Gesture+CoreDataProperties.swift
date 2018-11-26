@@ -2,7 +2,7 @@
 //  Gesture+CoreDataProperties.swift
 //  GestureiOS
 //
-//  Created by fluid on 11/18/18.
+//  Created by fluid on 11/26/18.
 //  Copyright © 2018 fluid. All rights reserved.
 //
 //
@@ -19,5 +19,7 @@ extension Gesture {
 
     @NSManaged public var name: String?
     @NSManaged public var sensor: String?
+    @NSManaged public var fileName: [String]?
+    @NSManaged public var uniqueFileCount: [String:Int]?
 
 }

@@ -9,8 +9,8 @@ import UIKit
 
 class DynamicDataSource: NSObject,UITableViewDataSource,UITableViewDelegate {
     
-   var sampleFileNames: [String] = []
-    
+    var sampleFileNames: [String] = []
+    var fileNameCount: [String: Int] = [:]
     
     override init(){
         super.init()
@@ -21,14 +21,22 @@ class DynamicDataSource: NSObject,UITableViewDataSource,UITableViewDelegate {
         self.sampleFileNames = sampleFileNames
     }
     
+    func setCount(fileDict:[String: Int]){
+        self.fileNameCount = fileDict
+    }
+
+    func getCount() -> [String: Int]{
+        return self.fileNameCount
+    }
+    
     func getData() -> [String]{
         return self.sampleFileNames
     }
     
-    func addData(fileName:String){
-        self.sampleFileNames.append(fileName)
-    }
-    
+//    func addData(fileName:String){
+//        self.sampleFileNames.append(fileName)
+//    }
+//
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return sampleFileNames.count
@@ -47,10 +55,28 @@ class DynamicDataSource: NSObject,UITableViewDataSource,UITableViewDelegate {
         // Override to support editing the table view.
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
             if editingStyle == .delete {
+                
+                
+               let fileManager = FileManager.default
+                do {
+                    let documentDirectory = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor:nil, create: true)
+                    let fileURL = documentDirectory.appendingPathComponent(self.sampleFileNames[indexPath.row]).appendingPathExtension("txt")
+                    print("Deleting File at File Path: \(fileURL.path)")
+                    
+                    try fileManager.removeItem(atPath: fileURL.path)
+                    
+                    print("File successfully deleted")
+                    
+                } catch {
+                    print(error)
+                }
+                
+                
                 sampleFileNames.remove(at: indexPath.row)
-//                self.gDVC.setData(sampleFileNames: self.sampleFileNames)
                 
                 tableView.deleteRows(at: [indexPath], with: .fade)
+                
+                
             } else if editingStyle == .insert {
                 // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
             }
