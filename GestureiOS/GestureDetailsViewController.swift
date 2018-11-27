@@ -13,7 +13,7 @@ import CoreData
 import MessageUI
 
 
-class GestureDetailsViewController: UITableViewController, UITextFieldDelegate {
+class GestureDetailsViewController: UITableViewController, UITextFieldDelegate, MFMailComposeViewControllerDelegate {
     
     var gesture: Gesture?
     let motion = CMMotionManager()
@@ -333,7 +333,36 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate {
         let text = nameTextField.text ?? ""
         saveGesture.isEnabled = !text.isEmpty
     }
-    
+  
+  @IBAction func exportData(_ sender: Any) {
+    //Check to see the device can send email.
+    if( MFMailComposeViewController.canSendMail() ) {
+      print("Can send email.")
+      
+      let mail = MFMailComposeViewController()
+      mail.mailComposeDelegate = self
+      
+      //Set the subject and message of the email
+      mail.setSubject("Subject")
+      mail.setMessageBody("Message body.", isHTML: false)
+      mail.setToRecipients(["sapkota@mit.edu", "tomasero@mit.edu"])
+      
+//      if let filePath = Bundle.main.path(forResource: "swifts", ofType: "wav") {
+//        print("File path loaded.")
+//
+//        if let fileData = NSData(contentsOfFile: filePath) {
+//          print("File data loaded.")
+//          mailComposer.addAttachmentData(fileData as Data, mimeType: "audio/wav", fileName: "swifts")
+//        }
+//      }
+      self.present(mail, animated: true, completion: nil)
+    }
+  }
+  
+  func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+    self.dismiss(animated: true, completion: nil)
+  }
+  
 }
 
 
