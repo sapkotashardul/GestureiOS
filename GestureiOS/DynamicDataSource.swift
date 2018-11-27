@@ -47,7 +47,7 @@ class DynamicDataSource: NSObject,UITableViewDataSource,UITableViewDelegate {
             fatalError("The dequeued cell is not an instance of TableViewCell.")
         }
         
-        cell.textLabel?.text = sampleFileNames[indexPath.row] + ".txt"
+        cell.textLabel?.text = sampleFileNames[indexPath.row]
         
         return cell
     }

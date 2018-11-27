@@ -335,35 +335,76 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate, 
     }
   
   @IBAction func exportData(_ sender: Any) {
-    //Check to see the device can send email.
-    if( MFMailComposeViewController.canSendMail() ) {
-      print("Can send email.")
+    
+    let emailAlertController = UIAlertController(
+        title: "Export files to your email",
+        message: "Please enter your email below",
+        preferredStyle: UIAlertController.Style.alert)
+    
+    let sendEmail = UIAlertAction(title: "Send",
+                                  style: .default) {
+                                    [unowned self] action in
+                                    
+                guard let textField = emailAlertController.textFields?.first
+                else {return}
+                            
+                                    
+                let email = textField.text as! String
+                                    
+                print("Sending email to", email)
+                                    
+            do{//Check to see the device can send email.
+                 if(try MFMailComposeViewController.canSendMail()) {
+                    print("Can send email.")
+                                        
+                    let mail = MFMailComposeViewController()
+                    mail.mailComposeDelegate = self
+                                        
+                    //Set the subject and message of the email
+                    if let gestureName = self.gesture?.name,
+                        let gestureSensor = self.gesture?.sensor{
+                    
+                    mail.setSubject("Sensor Data for \(gestureName) using \(gestureSensor)")
+                    mail.setMessageBody("Attached", isHTML: false)
+                    }
+                    mail.setToRecipients([email])
+                        
+                    for fileName in self.sampleFileNames {
+                                            
+                        let fileManager = FileManager.default
+                        let documentDirectory = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor:nil, create: true)
+                        let fileURL = documentDirectory.appendingPathComponent(fileName).appendingPathExtension("txt")
+                        print("File Path: \(fileURL.path)")
+                        let fileData = NSData(contentsOfFile: fileURL.path)
+                        print("File data loaded.")
+                        mail.addAttachmentData(fileData as! Data, mimeType: "text/*", fileName: fileName)
+                        }
+                    self.present(mail, animated: true, completion: nil)
+                }
+            } catch {
+                
+                }
+            }
+
       
-      let mail = MFMailComposeViewController()
-      mail.mailComposeDelegate = self
-      
-      //Set the subject and message of the email
-      mail.setSubject("Subject")
-      mail.setMessageBody("Message body.", isHTML: false)
-      mail.setToRecipients(["sapkota@mit.edu", "tomasero@mit.edu"])
-      
-//      if let filePath = Bundle.main.path(forResource: "swifts", ofType: "wav") {
-//        print("File path loaded.")
-//
-//        if let fileData = NSData(contentsOfFile: filePath) {
-//          print("File data loaded.")
-//          mailComposer.addAttachmentData(fileData as Data, mimeType: "audio/wav", fileName: "swifts")
-//        }
-//      }
-      self.present(mail, animated: true, completion: nil)
-    }
-  }
-  
-  func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
-    self.dismiss(animated: true, completion: nil)
-  }
-  
+    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        
+    emailAlertController.addTextField()
+    emailAlertController.addAction(sendEmail)
+    emailAlertController.addAction(cancelAction)
+    
+    self.present(emailAlertController, animated: true, completion: nil)
+        
 }
+
+    
+func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        self.dismiss(animated: true, completion: nil)
+}
+    
+
+}
+
 
 
 // MARK: - UITableViewDelegate
