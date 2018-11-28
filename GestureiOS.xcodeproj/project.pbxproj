@@ -23,6 +23,7 @@
 		00CD729D2194CEAC0063DC56 /* GestureiOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CD729C2194CEAC0063DC56 /* GestureiOSTests.swift */; };
 		00CD72A82194CEAC0063DC56 /* GestureiOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CD72A72194CEAC0063DC56 /* GestureiOSUITests.swift */; };
 		00F9852421A51F580063D780 /* DynamicDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F9852321A51F580063D780 /* DynamicDataSource.swift */; };
+		FFB46C5621AE07CC0045F0C0 /* ExoEarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB46C5521AE07CC0045F0C0 /* ExoEarController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,7 @@
 		00CD72A72194CEAC0063DC56 /* GestureiOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureiOSUITests.swift; sourceTree = "<group>"; };
 		00CD72A92194CEAC0063DC56 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00F9852321A51F580063D780 /* DynamicDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicDataSource.swift; sourceTree = "<group>"; };
+		FFB46C5521AE07CC0045F0C0 /* ExoEarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExoEarController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +120,7 @@
 				008967F221ABAD0B007C91A0 /* Gesture+CoreDataClass.swift */,
 				008967F621ABB82D007C91A0 /* Gesture+CoreDataProperties.swift */,
 				00955D842194F15300CC0469 /* GestureDetailsViewController.swift */,
+				FFB46C5521AE07CC0045F0C0 /* ExoEarController.swift */,
 				00955D822194E7C000CC0469 /* GesturesViewController.swift */,
 				00CD72842194CEA10063DC56 /* AppDelegate.swift */,
 				00CD72882194CEA10063DC56 /* Main.storyboard */,
@@ -284,6 +287,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				00F9852421A51F580063D780 /* DynamicDataSource.swift in Sources */,
+				FFB46C5621AE07CC0045F0C0 /* ExoEarController.swift in Sources */,
 				008967F721ABB82D007C91A0 /* Gesture+CoreDataProperties.swift in Sources */,
 				00955D812194DF2600CC0469 /* SampleData.swift in Sources */,
 				00955D852194F15300CC0469 /* GestureDetailsViewController.swift in Sources */,

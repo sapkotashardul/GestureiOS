@@ -23,7 +23,8 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate, 
     var sampleFileNames: [String] = ["TestData"]//[String]()
     var nameToSave: String = ""
     var fileNameCount: [String: Int] = [:]
-    
+    var exoEar = ExoEarController()
+  
     var sensor: String = "Accelerometer" {
         didSet {
             detailLabel.text = sensor
@@ -45,6 +46,7 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate, 
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        exoEar.initExoEar()
         sampleTableView.dataSource = dataSource
         sampleTableView.delegate = dataSource
         // Uncomment the following line to preserve selection between presentations
@@ -280,31 +282,42 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate, 
             print ("START")
             
             func startAccelerometers(){
+              
+              self.timer = Timer(fire: Date(), interval: (1.0/60.0),
+                                 repeats: true, block: { (timer) in
+                                  let dataAcc = self.exoEar.getData()
+                                  print(dataAcc)
+//                                  self.sensorData.append("\(x) \(y) \(z)")
+              })
+
+              // Add the timer to the current run loop.
+              RunLoop.current.add(self.timer, forMode: RunLoop.Mode.default)
+              
                 // Make sure the accelerometer hardware is available.
-                if self.motion.isAccelerometerAvailable {
-                    self.motion.accelerometerUpdateInterval = 1.0 / 60.0  // 60 Hz
-                    self.motion.startAccelerometerUpdates()
-                    
-                    // Configure a timer to fetch the data.
-                    self.timer = Timer(fire: Date(), interval: (1.0/60.0),
-                                       repeats: true, block: { (timer) in
-                                        // Get the accelerometer data.
-                                        if let data = self.motion.accelerometerData {
-                                            let x: Int = Int(data.acceleration.x*100)
-                                            let y: Int = Int(data.acceleration.y*100)
-                                            let z: Int = Int(data.acceleration.z*100)
-                                            //print(x,y,z)
-                                            
-                                            self.sensorData.append("\(x) \(y) \(z)")
-                                        }
-                    })
-                    
-                    // Add the timer to the current run loop.
-                    RunLoop.current.add(self.timer, forMode: RunLoop.Mode.default)
-                }
+//                if self.motion.isAccelerometerAvailable {
+//                    self.motion.accelerometerUpdateInterval = 1.0 / 60.0  // 60 Hz
+//                    self.motion.startAccelerometerUpdates()
+//
+//                    // Configure a timer to fetch the data.
+//                    self.timer = Timer(fire: Date(), interval: (1.0/60.0),
+//                                       repeats: true, block: { (timer) in
+//                                        // Get the accelerometer data.
+//                                        if let data = self.motion.accelerometerData {
+//                                            let x: Int = Int(data.acceleration.x*100)
+//                                            let y: Int = Int(data.acceleration.y*100)
+//                                            let z: Int = Int(data.acceleration.z*100)
+//                                            //print(x,y,z)
+//
+//                                            self.sensorData.append("\(x) \(y) \(z)")
+//                                        }
+//                    })
+//
+//                    // Add the timer to the current run loop.
+//                    RunLoop.current.add(self.timer, forMode: RunLoop.Mode.default)
+//                }
             }
             startAccelerometers()
-            
+          
             //save the x y z reading to file system
             
             // Show another alert view
