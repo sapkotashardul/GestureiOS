@@ -255,7 +255,8 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate, 
         secondAlertController.addAction(UIAlertAction(title: "Stop", style: UIAlertAction.Style.default, handler: { (action) in
             firstAlertController.dismiss(animated: true, completion: nil)
                 print("STOP")
-                self.motion.stopAccelerometerUpdates()
+                //self.motion.stopAccelerometerUpdates()
+                self.timer.invalidate()
                 print("sensorData", self.sensorData)
             
                 //create a third alert view here to get the file name and save it
@@ -268,7 +269,8 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate, 
         secondAlertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.default, handler: { (action) in
             firstAlertController.dismiss(animated: true, completion: nil)
             print("CANCEL")
-            self.motion.stopAccelerometerUpdates()
+            self.timer.invalidate()
+            //self.motion.stopAccelerometerUpdates()
             print("sensorData", self.sensorData)
             self.sensorData = []
         }))
@@ -287,8 +289,10 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate, 
                                  repeats: true, block: { (timer) in
                                   let dataAcc = self.exoEar.getData()
                                   print(dataAcc)
-//                                  self.sensorData.append("\(x) \(y) \(z)")
+                                  self.sensorData.append("\(dataAcc)")
               })
+                
+              //self.timer.fire()
 
               // Add the timer to the current run loop.
               RunLoop.current.add(self.timer, forMode: RunLoop.Mode.default)
@@ -337,7 +341,6 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate, 
             let selectedSensor = sensorPickerViewController.selectedSensor {
             sensor = selectedSensor
         }
-        
     }
     
     
