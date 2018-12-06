@@ -5,8 +5,9 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="sensor" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uniqueFileCount" optional="YES" attributeType="Transformable" customClassName="[String:Int]" syncable="YES"/>
+        <attribute name="uniqueFileName" optional="YES" attributeType="Transformable" customClassName="[String:String]" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Gesture" positionX="-63" positionY="-18" width="128" height="105"/>
+        <element name="Gesture" positionX="-63" positionY="-18" width="128" height="120"/>
     </elements>
 </model>

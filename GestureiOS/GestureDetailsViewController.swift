@@ -24,6 +24,7 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate, 
     var nameToSave: String = ""
     var fileNameCount: [String: Int] = [:]
     var exoEar = ExoEarController()
+    var fileNameToUniqueName: [String: String] = [:]
   
     var sensor: String = "Accelerometer" {
         didSet {
@@ -61,8 +62,10 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate, 
             detailLabel.text = gesture.sensor
             self.sampleFileNames = gesture.fileName ?? []
             self.fileNameCount = gesture.uniqueFileCount ?? [:]
+            self.fileNameToUniqueName = gesture.uniqueFileName ?? [:]
             self.dataSource.setData(sampleFileNames: self.sampleFileNames)
             self.dataSource.setCount(fileDict: self.fileNameCount)
+            self.dataSource.setName(fileNameDict: self.fileNameToUniqueName)
             self.flag = false
         }
         
@@ -96,10 +99,10 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate, 
         
         let gestureName = nameTextField.text ?? ""
         
-        save(gestureName: gestureName, gestureSensor: detailLabel.text ?? "", gestureFiles: self.dataSource.getData(), gestureFileCount: self.dataSource.getCount())
+        save(gestureName: gestureName, gestureSensor: detailLabel.text ?? "", gestureFiles: self.dataSource.getData(), gestureFileCount: self.dataSource.getCount(), gestureUniqueFileName: self.dataSource.getName())
     }
     
-    func save(gestureName: String, gestureSensor: String, gestureFiles: [String], gestureFileCount: [String: Int]){
+    func save(gestureName: String, gestureSensor: String, gestureFiles: [String], gestureFileCount: [String: Int], gestureUniqueFileName: [String: String]){
         // 1
         guard let appDelegate =
             UIApplication.shared.delegate as? AppDelegate else {
@@ -122,6 +125,7 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate, 
         self.gesture?.sensor = gestureSensor
         self.gesture?.fileName = gestureFiles
         self.gesture?.uniqueFileCount = gestureFileCount
+        self.gesture?.uniqueFileName = gestureUniqueFileName
             
         }
         else{
@@ -132,6 +136,7 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate, 
                 self.gesture?.sensor = gestureSensor
                 self.gesture?.fileName = gestureFiles
                 self.gesture?.uniqueFileCount = gestureFileCount
+                self.gesture?.uniqueFileName = gestureUniqueFileName
             } catch {
                 print("Error loading and editing existing CoreData object")
             }
@@ -210,6 +215,7 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate, 
                                         
                                         self.sampleFileNames = self.dataSource.getData()
                                         self.fileNameCount = self.dataSource.getCount()
+                                        self.fileNameToUniqueName = self.dataSource.getName()
                                         let newIndexPath = IndexPath(row: self.sampleFileNames.count, section: 0)
                                         
                                         //make filename unique
@@ -228,13 +234,19 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate, 
                                             }
                                         }
                                         
+                                        // convert fileName to unique fileName using UUID
+                                        var uuid = UUID().uuidString
+                                        var uniqueNameToSave = self.nameToSave + "_\(uuid)"
+                                        self.fileNameToUniqueName[self.nameToSave] = uniqueNameToSave
+                                        
                                         self.sampleFileNames.append(self.nameToSave)
                                         
                                         self.dataSource.setData(sampleFileNames: self.sampleFileNames)
                                         self.dataSource.setCount(fileDict: self.fileNameCount)
+                                        self.dataSource.setName(fileNameDict: self.fileNameToUniqueName)
                                         print("name of file", self.nameToSave)
                                         
-                                        self.saveToFile(fileName: self.nameToSave, stringToWrite: self.sensorData)
+                                        self.saveToFile(fileName: self.fileNameToUniqueName[self.nameToSave]!, stringToWrite: self.sensorData)
                                         self.sensorData = []
                                         
                                         self.sampleTableView.beginUpdates()
@@ -362,14 +374,15 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate, 
                     mail.setToRecipients([email])
                         
                     for fileName in self.sampleFileNames {
-                                            
+                        
+                        var uniqueFileName = self.fileNameToUniqueName[fileName]
                         let fileManager = FileManager.default
                         let documentDirectory = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor:nil, create: true)
-                        let fileURL = documentDirectory.appendingPathComponent(fileName).appendingPathExtension("txt")
+                        let fileURL = documentDirectory.appendingPathComponent(uniqueFileName!).appendingPathExtension("txt")
                         print("File Path: \(fileURL.path)")
                         let fileData = NSData(contentsOfFile: fileURL.path)
                         print("File data loaded.")
-                        mail.addAttachmentData(fileData! as Data, mimeType: "text/*", fileName: fileName + ".txt")
+                        mail.addAttachmentData(fileData! as Data, mimeType: "text/*", fileName: uniqueFileName! + ".txt")
                         }
                     self.present(mail, animated: true, completion: nil)
                 }

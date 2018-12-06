@@ -11,6 +11,7 @@ class DynamicDataSource: NSObject,UITableViewDataSource,UITableViewDelegate {
     
     var sampleFileNames: [String] = []
     var fileNameCount: [String: Int] = [:]
+    var uniqueFileNames: [String: String] = [:]
     
     override init(){
         super.init()
@@ -24,9 +25,17 @@ class DynamicDataSource: NSObject,UITableViewDataSource,UITableViewDelegate {
     func setCount(fileDict:[String: Int]){
         self.fileNameCount = fileDict
     }
+    
+    func setName(fileNameDict:[String: String]){
+        self.uniqueFileNames = fileNameDict
+    }
 
     func getCount() -> [String: Int]{
         return self.fileNameCount
+    }
+    
+    func getName() -> [String: String]{
+        return self.uniqueFileNames
     }
     
     func getData() -> [String]{

@@ -21,5 +21,6 @@ extension Gesture {
     @NSManaged public var sensor: String?
     @NSManaged public var fileName: [String]?
     @NSManaged public var uniqueFileCount: [String:Int]?
+    @NSManaged public var uniqueFileName: [String:String]?
 
 }
