@@ -101,8 +101,11 @@ class ExoEarController: UIViewController,
   let alpha: Float = 0.2
   var currAccX: Int32 = 0
   var currAccY: Int32 = 0
+  var currAccZ: Int32 = 0
   var oldAccX: Int32 = 0
   var oldAccY: Int32 = 0
+  var oldAccZ: Int32 = 0
+
   
   func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
     //    print("Data")
@@ -115,14 +118,18 @@ class ExoEarController: UIViewController,
       
       var uAccX: UInt32 = 0
       var uAccY: UInt32 = 0
+      var uAccZ: UInt32 = 0
       
       
-      dataReceived.getBytes(&uAccX, range: NSRange(location: 12, length: 4))
-      dataReceived.getBytes(&uAccY, range: NSRange(location: 16, length: 4))
+      dataReceived.getBytes(&uAccX, range: NSRange(location: 0, length: 4))
+      dataReceived.getBytes(&uAccY, range: NSRange(location: 4, length: 4))
+      dataReceived.getBytes(&uAccZ, range: NSRange(location: 8, length: 4))
+
       
       
       var accX: Int32 = Int32(uAccX)
       var accY: Int32 = Int32(uAccY)
+      var accZ: Int32 = Int32(uAccZ)
       
       let max: Int32 = 65536
       let mid: Int32 = 65536/2
@@ -133,19 +140,25 @@ class ExoEarController: UIViewController,
       if (accY > mid) {
         accY = accY - max
       }
-      
+      if (accZ > mid) {
+            accZ = accZ - max
+        }
       currAccX = Int32(alpha * Float(accX) + (1 - alpha) * Float(currAccX))
       currAccY = Int32(alpha * Float(accY) + (1 - alpha) * Float(currAccY))
-      
+      currAccZ = Int32(alpha * Float(accZ) + (1 - alpha) * Float(currAccZ))
+
       
       let distX = abs(currAccX - oldAccX)
       let distY = abs(currAccY - oldAccY)
-      
+      let distZ = abs(currAccZ - oldAccZ)
+
+        
 //      print(currAccX, oldAccX, distX);
 //      print(currAccY, oldAccY, distY);
       
       oldAccX = currAccX
       oldAccY = currAccY
+      oldAccY = currAccZ
       
 //      print(currAccX, currAccY)
 
@@ -153,7 +166,7 @@ class ExoEarController: UIViewController,
   }
   
   func getData() -> [Int32] {
-    return [currAccX, currAccY]
+    return [currAccX, currAccY, currAccZ]
   }
   
   func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: Error?) {

@@ -190,9 +190,8 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate, 
         
         let secondAlertController = UIAlertController(
             title: "Recording Sample",
-            message: "Recording....",
+            message: "Recording.... ",
             preferredStyle: UIAlertController.Style.alert)
-        
         
         let thirdAlertController = UIAlertController(
             title: "Save",
@@ -208,7 +207,6 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate, 
                                                 return
                                             }
                                         self.nameToSave = textField.text as! String
-                                        
                                         
                                         self.sampleFileNames = self.dataSource.getData()
                                         self.fileNameCount = self.dataSource.getCount()
@@ -290,35 +288,13 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate, 
                                   let dataAcc = self.exoEar.getData()
                                   print(dataAcc)
                                   self.sensorData.append("\(dataAcc)")
+                                  secondAlertController.message = "Recording values: (\(dataAcc[0]), \(dataAcc[1]), \(dataAcc[2]))"
               })
                 
               //self.timer.fire()
 
               // Add the timer to the current run loop.
               RunLoop.current.add(self.timer, forMode: RunLoop.Mode.default)
-              
-                // Make sure the accelerometer hardware is available.
-//                if self.motion.isAccelerometerAvailable {
-//                    self.motion.accelerometerUpdateInterval = 1.0 / 60.0  // 60 Hz
-//                    self.motion.startAccelerometerUpdates()
-//
-//                    // Configure a timer to fetch the data.
-//                    self.timer = Timer(fire: Date(), interval: (1.0/60.0),
-//                                       repeats: true, block: { (timer) in
-//                                        // Get the accelerometer data.
-//                                        if let data = self.motion.accelerometerData {
-//                                            let x: Int = Int(data.acceleration.x*100)
-//                                            let y: Int = Int(data.acceleration.y*100)
-//                                            let z: Int = Int(data.acceleration.z*100)
-//                                            //print(x,y,z)
-//
-//                                            self.sensorData.append("\(x) \(y) \(z)")
-//                                        }
-//                    })
-//
-//                    // Add the timer to the current run loop.
-//                    RunLoop.current.add(self.timer, forMode: RunLoop.Mode.default)
-//                }
             }
             startAccelerometers()
           
@@ -393,7 +369,7 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate, 
                         print("File Path: \(fileURL.path)")
                         let fileData = NSData(contentsOfFile: fileURL.path)
                         print("File data loaded.")
-                        mail.addAttachmentData(fileData as! Data, mimeType: "text/*", fileName: fileName)
+                        mail.addAttachmentData(fileData! as Data, mimeType: "text/*", fileName: fileName + ".txt")
                         }
                     self.present(mail, animated: true, completion: nil)
                 }
@@ -406,6 +382,7 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate, 
     let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         
     emailAlertController.addTextField()
+    emailAlertController.textFields?.first?.text = "sapkota@mit.edu"
     emailAlertController.addAction(sendEmail)
     emailAlertController.addAction(cancelAction)
     
