@@ -382,7 +382,7 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate, 
                         print("File Path: \(fileURL.path)")
                         let fileData = NSData(contentsOfFile: fileURL.path)
                         print("File data loaded.")
-                        mail.addAttachmentData(fileData! as Data, mimeType: "text/*", fileName: uniqueFileName! + ".txt")
+                        mail.addAttachmentData(fileData! as Data, mimeType: "text/*", fileName: fileName + ".txt")
                         }
                     self.present(mail, animated: true, completion: nil)
                 }
