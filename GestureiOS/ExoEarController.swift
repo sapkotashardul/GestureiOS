@@ -97,73 +97,106 @@ class ExoEarController: UIViewController,
       debugPrint("Characteristic: ", thisCharacteristic.uuid)
     }
   }
-  
-  let alpha: Float = 0.2
-  var currAccX: Int32 = 0
-  var currAccY: Int32 = 0
-  var currAccZ: Int32 = 0
-  var oldAccX: Int32 = 0
-  var oldAccY: Int32 = 0
-  var oldAccZ: Int32 = 0
+
+    let alpha: Float = 0.2
+    var currAccX: Int32 = 0
+    var currAccY: Int32 = 0
+    var currAccZ: Int32 = 0
+    var oldAccX: Int32 = 0
+    var oldAccY: Int32 = 0
+    var oldAccZ: Int32 = 0
 
   
-  func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-    //    print("Data")
+    
+    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
+        print("Data")
     // Make sure it is the peripheral we want
     //    print(characteristic.uuid)
-    if characteristic.uuid == UUID_READ {
-      // Get bytes into string
-      let dataReceived = characteristic.value! as NSData
-//      print(dataReceived)
-      
-      var uAccX: UInt32 = 0
-      var uAccY: UInt32 = 0
-      var uAccZ: UInt32 = 0
-      
-      
-      dataReceived.getBytes(&uAccX, range: NSRange(location: 0, length: 4))
-      dataReceived.getBytes(&uAccY, range: NSRange(location: 4, length: 4))
-      dataReceived.getBytes(&uAccZ, range: NSRange(location: 8, length: 4))
+        if characteristic.uuid == UUID_READ {
+        // Get bytes into string
+            let dataReceived = characteristic.value! as NSData
+          print(dataReceived)
 
+        var uAccX: UInt32 = 0
+        var uAccY: UInt32 = 0
+        var uAccZ: UInt32 = 0
+        var uNAccX: UInt32 = 0
+        var uNAccY: UInt32 = 0
+        var uNAccZ: UInt32 = 0
+        var uGyrX: UInt32 = 0
+        var uGyrY: UInt32 = 0
+        var uGyrZ: UInt32 = 0
+        var uNGyrX: UInt32 = 0
+        var uNGyrY: UInt32 = 0
+        var uNGyrZ: UInt32 = 0
+      
+        dataReceived.getBytes(&uAccX, range: NSRange(location: 0, length: 4))
+        dataReceived.getBytes(&uAccY, range: NSRange(location: 4, length: 4))
+        dataReceived.getBytes(&uAccZ, range: NSRange(location: 8, length: 4))
+       
+        dataReceived.getBytes(&uGyrX, range: NSRange(location: 12, length: 4))
+        dataReceived.getBytes(&uGyrY, range: NSRange(location: 16, length: 4))
+        dataReceived.getBytes(&uGyrZ, range: NSRange(location: 20, length: 4))
+            
+//        dataReceived.getBytes(&uNAccX, range: NSRange(location: 24, length: 4))
+//        dataReceived.getBytes(&uNAccY, range: NSRange(location: 28, length: 4))
+//        dataReceived.getBytes(&uNAccZ, range: NSRange(location: 32, length: 4))
+//
+//        dataReceived.getBytes(&uNGyrX, range: NSRange(location: 36, length: 4))
+//        dataReceived.getBytes(&uNGyrY, range: NSRange(location: 40, length: 4))
+//        dataReceived.getBytes(&uNGyrZ, range: NSRange(location: 44, length: 4))
       
       
-      var accX: Int32 = Int32(uAccX)
-      var accY: Int32 = Int32(uAccY)
-      var accZ: Int32 = Int32(uAccZ)
-      
-      let max: Int32 = 65536
-      let mid: Int32 = 65536/2
-      
-      if (accX > mid) {
-        accX = accX - max
-      }
-      if (accY > mid) {
-        accY = accY - max
-      }
-      if (accZ > mid) {
+        var accX: Int32 = Int32(uAccX)
+        var accY: Int32 = Int32(uAccY)
+        var accZ: Int32 = Int32(uAccZ)
+//        var nAccX: Int32 = Int32(uNAccX)
+//        var nAccY: Int32 = Int32(uNAccY)
+//        var nAccZ: Int32 = Int32(uNAccZ)
+        var gyrX: Int32 = Int32(uGyrX)
+        var gyrY: Int32 = Int32(uGyrY)
+        var gyrZ: Int32 = Int32(uGyrZ)
+//        var nGyrX: Int32 = Int32(uNGyrX)
+//        var nGyrY: Int32 = Int32(uNGyrY)
+//        var nGyrZ: Int32 = Int32(uNGyrZ)
+
+        print(accX, accY, accZ)
+//        print(nAccX, nAccY, nAccZ)
+        print(gyrX, gyrY, gyrZ)
+//        print(nGyrX, nGyrY)
+
+        let max: Int32 = 65536
+        let mid: Int32 = 65536/2
+
+        if (accX > mid) {
+            accX = accX - max
+        }
+        if (accY > mid) {
+            accY = accY - max
+        }
+        if (accZ > mid) {
             accZ = accZ - max
         }
-      currAccX = Int32(alpha * Float(accX) + (1 - alpha) * Float(currAccX))
-      currAccY = Int32(alpha * Float(accY) + (1 - alpha) * Float(currAccY))
-      currAccZ = Int32(alpha * Float(accZ) + (1 - alpha) * Float(currAccZ))
+        currAccX = Int32(alpha * Float(accX) + (1 - alpha) * Float(currAccX))
+        currAccY = Int32(alpha * Float(accY) + (1 - alpha) * Float(currAccY))
+        currAccZ = Int32(alpha * Float(accZ) + (1 - alpha) * Float(currAccZ))
 
-      
-      let distX = abs(currAccX - oldAccX)
-      let distY = abs(currAccY - oldAccY)
-      let distZ = abs(currAccZ - oldAccZ)
 
-        
-//      print(currAccX, oldAccX, distX);
-//      print(currAccY, oldAccY, distY);
-      
-      oldAccX = currAccX
-      oldAccY = currAccY
-      oldAccY = currAccZ
-      
-//      print(currAccX, currAccY)
+        let distX = abs(currAccX - oldAccX)
+        let distY = abs(currAccY - oldAccY)
+        let distZ = abs(currAccZ - oldAccZ)
 
+
+        //      print(currAccX, oldAccX, distX);
+        //      print(currAccY, oldAccY, distY);
+
+        oldAccX = currAccX
+        oldAccY = currAccY
+        oldAccY = currAccZ
+
+        }
+    
     }
-  }
   
   func getData() -> [Int32] {
     return [currAccX, currAccY, currAccZ]
