@@ -106,16 +106,23 @@ class ExoEarController: UIViewController,
     var oldAccY: Int32 = 0
     var oldAccZ: Int32 = 0
 
+    var currGyrX: Int32 = 0
+    var currGyrY: Int32 = 0
+    var currGyrZ: Int32 = 0
+    var oldGyrX: Int32 = 0
+    var oldGyrY: Int32 = 0
+    var oldGyrZ: Int32 = 0
+
   
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-        print("Data")
+        //print("Data")
     // Make sure it is the peripheral we want
     //    print(characteristic.uuid)
         if characteristic.uuid == UUID_READ {
         // Get bytes into string
             let dataReceived = characteristic.value! as NSData
-          print(dataReceived)
+         // print(dataReceived)
 
         var uAccX: UInt32 = 0
         var uAccY: UInt32 = 0
@@ -160,9 +167,9 @@ class ExoEarController: UIViewController,
 //        var nGyrY: Int32 = Int32(uNGyrY)
 //        var nGyrZ: Int32 = Int32(uNGyrZ)
 
-        print(accX, accY, accZ)
+   //     print(accX, accY, accZ)
 //        print(nAccX, nAccY, nAccZ)
-        print(gyrX, gyrY, gyrZ)
+     //   print(gyrX, gyrY, gyrZ)
 //        print(nGyrX, nGyrY)
 
         let max: Int32 = 65536
@@ -177,10 +184,24 @@ class ExoEarController: UIViewController,
         if (accZ > mid) {
             accZ = accZ - max
         }
+        
+        if (gyrX > mid) {
+            gyrX = gyrX - max
+        }
+        if (gyrY > mid) {
+            gyrY = gyrY - max
+        }
+        if (gyrZ > mid) {
+            gyrZ = gyrZ - max
+        }
+            
         currAccX = Int32(alpha * Float(accX) + (1 - alpha) * Float(currAccX))
         currAccY = Int32(alpha * Float(accY) + (1 - alpha) * Float(currAccY))
         currAccZ = Int32(alpha * Float(accZ) + (1 - alpha) * Float(currAccZ))
 
+        currGyrX = Int32(alpha * Float(gyrX) + (1 - alpha) * Float(currGyrX))
+        currGyrY = Int32(alpha * Float(gyrY) + (1 - alpha) * Float(currGyrY))
+        currGyrZ = Int32(alpha * Float(gyrZ) + (1 - alpha) * Float(currGyrZ))
 
         let distX = abs(currAccX - oldAccX)
         let distY = abs(currAccY - oldAccY)
@@ -194,12 +215,17 @@ class ExoEarController: UIViewController,
         oldAccY = currAccY
         oldAccY = currAccZ
 
+        oldGyrX = currGyrX
+        oldGyrY = currGyrY
+        oldGyrY = currGyrZ
+
+            
         }
     
     }
   
-  func getData() -> [Int32] {
-    return [currAccX, currAccY, currAccZ]
+    func getData() -> [(Int32, Int32, Int32)] {
+    return [(currAccX, currAccY, currAccZ), (currGyrX, currGyrY, currGyrZ)]
   }
   
   func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: Error?) {

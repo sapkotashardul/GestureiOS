@@ -300,7 +300,7 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate, 
                                   let dataAcc = self.exoEar.getData()
                                   print(dataAcc)
                                   self.sensorData.append("\(dataAcc)")
-                                  secondAlertController.message = "Recording values: (\(dataAcc[0]), \(dataAcc[1]), \(dataAcc[2]))"
+                                    secondAlertController.message = "Recording values: Acc: \(dataAcc[0]), Gyr: \(dataAcc[1]))"
               })
                 
               //self.timer.fire()
@@ -382,7 +382,7 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate, 
                         print("File Path: \(fileURL.path)")
                         let fileData = NSData(contentsOfFile: fileURL.path)
                         print("File data loaded.")
-                        mail.addAttachmentData(fileData! as Data, mimeType: "text/*", fileName: fileName + ".txt")
+                        mail.addAttachmentData(fileData! as Data, mimeType: "text/txt", fileName: fileName + ".txt")
                         }
                     self.present(mail, animated: true, completion: nil)
                 }
