@@ -155,7 +155,7 @@ class GesturesViewController: UITableViewController {
             
             
         }
-}
+    }
     
     @IBAction func cancelToGesturesViewController(_ segue: UIStoryboardSegue) {
     }
