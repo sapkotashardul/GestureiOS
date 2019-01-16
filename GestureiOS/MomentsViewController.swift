@@ -1,5 +1,5 @@
 //
-//  PlacesViewController.swift
+//  MomentsViewController.swift
 //  GestureiOS
 //
 //  Created by Tomás Vega on 1/14/19.
@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 import os.log
 
-class PlacesViewController: UITableViewController {
+class MomentsViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,11 +47,11 @@ class PlacesViewController: UITableViewController {
         
         switch(segue.identifier ?? "") {
             
-        case "AddPlace":
-            os_log("Adding a new place.", log: OSLog.default, type: .debug)
+        case "AddMoment":
+            os_log("Adding a new moment.", log: OSLog.default, type: .debug)
             
-        case "EditPlace":
-            guard let placeViewController = segue.destination as? PlaceViewController else {
+        case "EditMoment":
+            guard let momentViewController = segue.destination as? MomentViewController else {
                 fatalError("Unexpected destination: \(segue.destination)")
             }
             

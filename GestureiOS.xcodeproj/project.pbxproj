@@ -24,11 +24,12 @@
 		00CD72A82194CEAC0063DC56 /* GestureiOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CD72A72194CEAC0063DC56 /* GestureiOSUITests.swift */; };
 		00F9852421A51F580063D780 /* DynamicDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F9852321A51F580063D780 /* DynamicDataSource.swift */; };
 		FFB46C5621AE07CC0045F0C0 /* ExoEarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB46C5521AE07CC0045F0C0 /* ExoEarController.swift */; };
-		FFE0FE2921EC5EA4002CF495 /* PlacesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE0FE2821EC5EA4002CF495 /* PlacesViewController.swift */; };
-		FFE0FE2B21EC5EE3002CF495 /* PlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE0FE2A21EC5EE3002CF495 /* PlaceViewController.swift */; };
+		FFE0FE2921EC5EA4002CF495 /* MomentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE0FE2821EC5EA4002CF495 /* MomentsViewController.swift */; };
+		FFE0FE2B21EC5EE3002CF495 /* MomentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE0FE2A21EC5EE3002CF495 /* MomentViewController.swift */; };
 		FFE0FE2D21EC69DB002CF495 /* PlaceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE0FE2C21EC69DB002CF495 /* PlaceTableViewCell.swift */; };
 		FFE0FE3421ED28E6002CF495 /* SearchPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE0FE3321ED28E6002CF495 /* SearchPlaceViewController.swift */; };
 		FFE0FE3621ED2A47002CF495 /* MapDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE0FE3521ED2A47002CF495 /* MapDataSource.swift */; };
+		FFE0FE3821EEA508002CF495 /* SelectPlaceTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE0FE3721EEA508002CF495 /* SelectPlaceTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,11 +73,12 @@
 		00CD72A92194CEAC0063DC56 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00F9852321A51F580063D780 /* DynamicDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicDataSource.swift; sourceTree = "<group>"; };
 		FFB46C5521AE07CC0045F0C0 /* ExoEarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExoEarController.swift; sourceTree = "<group>"; };
-		FFE0FE2821EC5EA4002CF495 /* PlacesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesViewController.swift; sourceTree = "<group>"; };
-		FFE0FE2A21EC5EE3002CF495 /* PlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceViewController.swift; sourceTree = "<group>"; };
+		FFE0FE2821EC5EA4002CF495 /* MomentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentsViewController.swift; sourceTree = "<group>"; };
+		FFE0FE2A21EC5EE3002CF495 /* MomentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentViewController.swift; sourceTree = "<group>"; };
 		FFE0FE2C21EC69DB002CF495 /* PlaceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceTableViewCell.swift; sourceTree = "<group>"; };
 		FFE0FE3321ED28E6002CF495 /* SearchPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPlaceViewController.swift; sourceTree = "<group>"; };
 		FFE0FE3521ED2A47002CF495 /* MapDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDataSource.swift; sourceTree = "<group>"; };
+		FFE0FE3721EEA508002CF495 /* SelectPlaceTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectPlaceTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,14 +129,15 @@
 		00CD72832194CEA10063DC56 /* GestureiOS */ = {
 			isa = PBXGroup;
 			children = (
-				FFE0FE3521ED2A47002CF495 /* MapDataSource.swift */,
-				FFE0FE3321ED28E6002CF495 /* SearchPlaceViewController.swift */,
 				008967F221ABAD0B007C91A0 /* Gesture+CoreDataClass.swift */,
 				008967F621ABB82D007C91A0 /* Gesture+CoreDataProperties.swift */,
-				FFB46C5521AE07CC0045F0C0 /* ExoEarController.swift */,
 				00955D822194E7C000CC0469 /* GesturesViewController.swift */,
-				FFE0FE2821EC5EA4002CF495 /* PlacesViewController.swift */,
-				FFE0FE2A21EC5EE3002CF495 /* PlaceViewController.swift */,
+				FFB46C5521AE07CC0045F0C0 /* ExoEarController.swift */,
+				FFE0FE3521ED2A47002CF495 /* MapDataSource.swift */,
+				FFE0FE3321ED28E6002CF495 /* SearchPlaceViewController.swift */,
+				FFE0FE2A21EC5EE3002CF495 /* MomentViewController.swift */,
+				FFE0FE3721EEA508002CF495 /* SelectPlaceTableViewController.swift */,
+				FFE0FE2821EC5EA4002CF495 /* MomentsViewController.swift */,
 				00CD72842194CEA10063DC56 /* AppDelegate.swift */,
 				00CD72882194CEA10063DC56 /* Main.storyboard */,
 				00955D842194F15300CC0469 /* GestureDetailsViewController.swift */,
@@ -309,15 +312,16 @@
 				00955D852194F15300CC0469 /* GestureDetailsViewController.swift in Sources */,
 				00955D832194E7C000CC0469 /* GesturesViewController.swift in Sources */,
 				008967F421ABAD0B007C91A0 /* Gesture+CoreDataClass.swift in Sources */,
-				FFE0FE2921EC5EA4002CF495 /* PlacesViewController.swift in Sources */,
+				FFE0FE2921EC5EA4002CF495 /* MomentsViewController.swift in Sources */,
 				00955D87219765BC00CC0469 /* SensorPickerViewController.swift in Sources */,
 				00CD72852194CEA10063DC56 /* AppDelegate.swift in Sources */,
 				FFE0FE3621ED2A47002CF495 /* MapDataSource.swift in Sources */,
-				FFE0FE2B21EC5EE3002CF495 /* PlaceViewController.swift in Sources */,
+				FFE0FE2B21EC5EE3002CF495 /* MomentViewController.swift in Sources */,
 				0007EA51219CC800006433E7 /* StoreSensorData.swift in Sources */,
 				00CD728D2194CEA10063DC56 /* GestureiOS.xcdatamodeld in Sources */,
 				0007EA4D21978EA3006433E7 /* GestureTableViewCell.swift in Sources */,
 				FFE0FE2D21EC69DB002CF495 /* PlaceTableViewCell.swift in Sources */,
+				FFE0FE3821EEA508002CF495 /* SelectPlaceTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

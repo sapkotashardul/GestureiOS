@@ -11,7 +11,7 @@ import MapKit
 
 protocol MapDataSourceDelegate: class{
     func refreshData()
-    func setPlace(place: MKMapItem)
+    func giveTest(s: String)
 }
 
 
@@ -24,6 +24,8 @@ class MapDataSource:NSObject{
     var places = [MKLocalSearchCompletion]()
     
     var selectedPlace: MKMapItem? = nil
+    
+    var testString: String = "test"
     
     weak var delegate:MapDataSourceDelegate?
     
@@ -100,16 +102,19 @@ extension MapDataSource:UITableViewDataSource{
 extension MapDataSource:UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("hola 1??")
         let item = locationAt(index: indexPath)
         let request = MKLocalSearch.Request()
         request.naturalLanguageQuery = item.subtitle
         let search = MKLocalSearch(request: request)
         search.start { (response, error) in
-            
+            print("hola 2??")
             guard let response = response else {return}
             guard let item = response.mapItems.first else {return}
             self.selectedPlace = item
-            self.delegate?.setPlace(place: item)
+            self.testString = "Barcelona"
+            self.delegate?.giveTest(s: self.testString)
+//            self.delegate?.setPlace(place: item)
             //            item.openInMaps(launchOptions: [MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving])
         }
     }
@@ -135,6 +140,5 @@ extension MapDataSource:UISearchBarDelegate{
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         searchCompleter.queryFragment = searchText
-        
     }
 }
