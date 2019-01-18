@@ -33,6 +33,7 @@
 		FFE0FE3A21F03EA5002CF495 /* Objects.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE0FE3921F03EA5002CF495 /* Objects.swift */; };
 		FFE0FE3C21F05D3E002CF495 /* Moment+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE0FE3B21F05D3E002CF495 /* Moment+CoreDataProperties.swift */; };
 		FFE0FE3E21F05EB6002CF495 /* Moment+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE0FE3D21F05EB6002CF495 /* Moment+CoreDataClass.swift */; };
+		FFE0FE4021F1B437002CF495 /* MomentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE0FE3F21F1B437002CF495 /* MomentTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +86,7 @@
 		FFE0FE3921F03EA5002CF495 /* Objects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Objects.swift; sourceTree = "<group>"; };
 		FFE0FE3B21F05D3E002CF495 /* Moment+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Moment+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		FFE0FE3D21F05EB6002CF495 /* Moment+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Moment+CoreDataClass.swift"; sourceTree = "<group>"; };
+		FFE0FE3F21F1B437002CF495 /* MomentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,17 +141,18 @@
 				008967F621ABB82D007C91A0 /* Gesture+CoreDataProperties.swift */,
 				FFE0FE3D21F05EB6002CF495 /* Moment+CoreDataClass.swift */,
 				FFE0FE3B21F05D3E002CF495 /* Moment+CoreDataProperties.swift */,
-				00955D822194E7C000CC0469 /* GesturesViewController.swift */,
 				FFB46C5521AE07CC0045F0C0 /* ExoEarController.swift */,
 				FFE0FE3521ED2A47002CF495 /* MapDataSource.swift */,
 				FFE0FE3321ED28E6002CF495 /* SearchPlaceViewController.swift */,
 				FFE0FE2821EC5EA4002CF495 /* MomentsViewController.swift */,
 				FFE0FE2A21EC5EE3002CF495 /* MomentViewController.swift */,
+				FFE0FE3F21F1B437002CF495 /* MomentTableViewCell.swift */,
 				FFE0FE3721EEA508002CF495 /* SelectPlaceTableViewController.swift */,
-				00CD72842194CEA10063DC56 /* AppDelegate.swift */,
-				00CD72882194CEA10063DC56 /* Main.storyboard */,
+				00955D822194E7C000CC0469 /* GesturesViewController.swift */,
 				00955D842194F15300CC0469 /* GestureDetailsViewController.swift */,
 				0007EA4C21978EA3006433E7 /* GestureTableViewCell.swift */,
+				00CD72842194CEA10063DC56 /* AppDelegate.swift */,
+				00CD72882194CEA10063DC56 /* Main.storyboard */,
 				FFE0FE2C21EC69DB002CF495 /* PlaceTableViewCell.swift */,
 				00955D802194DF2600CC0469 /* SampleData.swift */,
 				00CD728E2194CEAC0063DC56 /* Assets.xcassets */,
@@ -324,6 +327,7 @@
 				00955D832194E7C000CC0469 /* GesturesViewController.swift in Sources */,
 				008967F421ABAD0B007C91A0 /* Gesture+CoreDataClass.swift in Sources */,
 				FFE0FE2921EC5EA4002CF495 /* MomentsViewController.swift in Sources */,
+				FFE0FE4021F1B437002CF495 /* MomentTableViewCell.swift in Sources */,
 				00955D87219765BC00CC0469 /* SensorPickerViewController.swift in Sources */,
 				00CD72852194CEA10063DC56 /* AppDelegate.swift in Sources */,
 				FFE0FE3621ED2A47002CF495 /* MapDataSource.swift in Sources */,

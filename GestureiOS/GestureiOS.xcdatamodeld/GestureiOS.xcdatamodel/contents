@@ -13,9 +13,10 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="person" optional="YES" attributeType="String" customClassName="[String:Int]" syncable="YES"/>
         <attribute name="place" optional="YES" attributeType="String" customClassName="[String:String]" syncable="YES"/>
+        <attribute name="time" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
     </entity>
     <elements>
         <element name="Gesture" positionX="-63" positionY="-18" width="128" height="120"/>
-        <element name="Moment" positionX="-63" positionY="-18" width="128" height="120"/>
+        <element name="Moment" positionX="-63" positionY="-18" width="128" height="135"/>
     </elements>
 </model>

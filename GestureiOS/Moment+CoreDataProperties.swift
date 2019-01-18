@@ -19,6 +19,7 @@ extension Moment {
     @NSManaged public var name: String?
     @NSManaged public var time: Date?
     @NSManaged public var person: String?
+    @NSManaged public var place: String?
     @NSManaged public var lon: NSNumber?
     @NSManaged public var lat: NSNumber?
     

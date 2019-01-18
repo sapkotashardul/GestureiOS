@@ -11,30 +11,71 @@ import CoreData
 import os.log
 
 protocol isAbleToReceiveMoment {
-    func pass(data:Moment)
+    func pass(moment: Moment)
 }
 
 class MomentsViewController: UITableViewController, isAbleToReceiveMoment {
     
-    
     var delegate: isAbleToReceiveMoment?
-    
-    func pass(data: Moment) {
-        print(data)
-    }
-    
-    
     var moments: [Moment] = []
+    
+    func pass(moment: Moment) {
+        print("Moments of success")
+        print(moment)
+//        moments.append(moment)s
+
+        print("moments")
+        print(moments)
+        
+        if let selectedIndexPath = tableView.indexPathForSelectedRow {
+            // Update an existing gesture.
+            moments[selectedIndexPath.row] = moment
+            tableView.reloadRows(at: [selectedIndexPath], with: .none)
+        } else {
+            // Add a new gesture.
+            let newIndexPath = IndexPath(row: moments.count, section: 0)
+            
+            moments.append(moment)
+            tableView.insertRows(at: [newIndexPath], with: .automatic)
+            self.tableView.reloadData()
+        }
+    }
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        navigationItem.leftBarButtonItem = editButtonItem
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+    }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        print("viewWillAppear")
+        super.viewWillAppear(animated)
+        
+        //1
+        guard let appDelegate =
+            UIApplication.shared.delegate as? AppDelegate else {
+                return
+        }
+        
+        let managedContext =
+            appDelegate.persistentContainer.viewContext
+        
+        //2
+        let fetchRequest =
+            NSFetchRequest<NSManagedObject>(entityName: "Moment")
+        
+        //3
+        do {
+            moments = try managedContext.fetch(fetchRequest) as! [Moment]
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
     }
 
     // MARK: - Table view data source
@@ -50,9 +91,49 @@ class MomentsViewController: UITableViewController, isAbleToReceiveMoment {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        cell.textLabel?.text = moments[indexPath.row].name
+        print(moments)
+        print(indexPath.row)
+        let moment = moments[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+//        cell.textLabel?.text = moments[indexPath.row].name
+        cell.textLabel?.text = moment.value(forKeyPath: "name") as? String
+        let date = moment.value(forKey: "time") as? Date
+        let place = moment.value(forKeyPath: "place") as? String
+        let placeName = place ?? "None"
+        let time = date?.description ?? "None"
+        cell.detailTextLabel?.text = placeName + " | " + time
         return cell
+    }
+    
+    // Override to support editing the table view.
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            //Delete from CoreData
+            
+            guard let appDelegate =
+                UIApplication.shared.delegate as? AppDelegate else {
+                    return
+            }
+            
+            let managedContext =
+                appDelegate.persistentContainer.viewContext
+            
+            managedContext.delete(moments[indexPath.row] as NSManagedObject)
+            
+            // Delete the row from the data source
+            moments.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            
+            do {
+                try managedContext.save()
+                
+            } catch let error as NSError {
+                print("Could not save. \(error), \(error.userInfo)")
+            }
+            
+        } else if editingStyle == .insert {
+            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+        }
     }
 
     
@@ -79,16 +160,16 @@ class MomentsViewController: UITableViewController, isAbleToReceiveMoment {
                 fatalError("Unexpected destination: \(segue.destination)")
             }
             
-//            guard let selectedPlaceCell = sender as? PlaceTableViewCell else {
-//                fatalError("Unexpected sender: \(String(describing: sender))")
-//            }
-//
-//            guard let indexPath = tableView.indexPath(for: selectedPlaceCell) else {
-//                fatalError("The selected cell is not being displayed by the table")
-//            }
+            guard let selectedMomentCell = sender as? MomentTableViewCell else {
+                fatalError("Unexpected sender: \(String(describing: sender))")
+            }
+
+            guard let indexPath = tableView.indexPath(for: selectedMomentCell) else {
+                fatalError("The selected cell is not being displayed by the table")
+            }
             
-//            let selectedPlace = places[indexPath.row]
-//            placeViewController.place = selectedPlace
+            let selectedMoment = moments[indexPath.row]
+            momentViewController.momentEdit = selectedMoment
             
         default:
             fatalError("Unexpected Segue Identifier; \(segue.identifier)")

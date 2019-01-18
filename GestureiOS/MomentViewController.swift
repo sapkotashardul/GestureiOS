@@ -10,6 +10,7 @@ import UIKit
 import MapKit
 import os.log
 import CoreLocation
+import CoreData
 
 
 protocol isAbleToReceivePlace {
@@ -21,12 +22,12 @@ class MomentViewController: UITableViewController, MKMapViewDelegate, CLLocation
     var delegate: isAbleToReceiveMoment?
     // MARK: - Outlets
     @IBOutlet weak var mapView: MKMapView!
-    @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var subDetailLabel: UILabel!
     @IBOutlet weak var switchTime: UISwitch!
     @IBOutlet weak var switchPerson: UISwitch!
     @IBOutlet weak var switchPlace: UISwitch!
+    @IBOutlet weak var textfieldName: UITextField!
     @IBOutlet weak var cellTime: UITableViewCell!
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var cellPerson: UITableViewCell!
@@ -37,31 +38,72 @@ class MomentViewController: UITableViewController, MKMapViewDelegate, CLLocation
         super.viewDidLoad()
 //        self.initMap()
         self.locateMe()
+        if momentEdit != nil { return }
+//        textfieldName.text = momentEdit.name
+//        datePicker.date = momentEdit.time ?? Date()
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        guard let appDelegate =
+            UIApplication.shared.delegate as? AppDelegate else {
+                return
+        }
     }
     
     var timeEnabled: Bool = true
     var personEnabled: Bool = true
     var placeEnabled: Bool = true
     
-    var moment: Moment!
-    
     @IBAction func cancelAddMoment(_ sender: UIBarButtonItem) {
         print("cancelAddMoment")
+        self.navigationController?.popViewController(animated: true)
         self.dismiss(animated: true, completion: nil)
     }
+    var momentEdit: Moment!
     
     @IBAction func doneAddMoment(_ sender: Any) {
         print("doneAddMoment")
-        print(moment)
-        var momentName = ""
-        var momentTime = ""
-        var momentPerson = ""
-        var momentPlace = ""
-//        moment = Moment(name: String, time: Date, person: String, place: Place)
-        if let moment = moment {
-            self.delegate?.pass(data:moment)
+        let momentTime: Date = datePicker.date
+        let momentPerson: String = ""
+        guard let momentName = textfieldName.text else {
+            return
         }
+        guard let appDelegate =
+            UIApplication.shared.delegate as? AppDelegate else {
+                return
+        }
+        
+        // 1
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        // 2
+        let entity = NSEntityDescription.entity(forEntityName: "Moment", in: managedContext)!
+        let moment = NSManagedObject(entity: entity, insertInto: managedContext)
+        
+        // 3
+        moment.setValue(momentName, forKeyPath: "name")
+        moment.setValue(momentTime, forKeyPath: "time")
+        moment.setValue(momentPerson, forKey: "person")
+        moment.setValue(placeName, forKey: "place")
+        moment.setValue(coordinates.longitude, forKey: "lon")
+        moment.setValue(coordinates.latitude, forKey: "lat")
+        
+        // 4
+        do {
+            try managedContext.save()
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+        }
+
+        print(moment)
+
+//        moment = Moment(name: String, time: Date, person: String, place: Place)
+        self.delegate?.pass(moment:moment as! Moment)
+        print("before dismiss")
         self.dismiss(animated: true, completion: nil)
+        print("before after")
     }
     
     @IBAction func didToggleSwitch(_ sender: UISwitch) {
@@ -170,14 +212,6 @@ class MomentViewController: UITableViewController, MKMapViewDelegate, CLLocation
         didSet {
             os_log("Choosing a new placeName.", log: OSLog.default, type: .debug)
             cellPlace.textLabel?.text = placeName
-        }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        guard let appDelegate =
-            UIApplication.shared.delegate as? AppDelegate else {
-                return
         }
     }
     

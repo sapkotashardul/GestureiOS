@@ -319,7 +319,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" textLabel="x9J-aV-BOF" detailTextLabel="j7M-3E-b6s" style="IBUITableViewCellStyleSubtitle" id="kvq-jk-v7H">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" textLabel="x9J-aV-BOF" detailTextLabel="j7M-3E-b6s" style="IBUITableViewCellStyleSubtitle" id="kvq-jk-v7H" customClass="MomentTableViewCell" customModule="GestureiOS" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="kvq-jk-v7H" id="bIY-HO-We6">
@@ -540,10 +540,10 @@
                         <outlet property="cellTime" destination="XgI-db-KSV" id="mT6-hb-Zd3"/>
                         <outlet property="datePicker" destination="S2E-9p-bWr" id="zIQ-vT-evg"/>
                         <outlet property="mapView" destination="5dy-Q1-n5S" id="0bv-4Z-6IB"/>
-                        <outlet property="nameTextField" destination="AX0-rX-kj2" id="0xL-Xm-HYm"/>
                         <outlet property="switchPerson" destination="eKt-4I-BPd" id="K0E-XN-iNV"/>
                         <outlet property="switchPlace" destination="k3w-NR-nV5" id="uuI-fq-Ldq"/>
                         <outlet property="switchTime" destination="Llx-TH-DvS" id="Xyt-y5-F6B"/>
+                        <outlet property="textfieldName" destination="AX0-rX-kj2" id="ge2-ia-2iQ"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jUO-QP-Ljc" userLabel="First Responder" sceneMemberID="firstResponder"/>
