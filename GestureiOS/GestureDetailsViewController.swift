@@ -304,7 +304,6 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate, 
               })
                 
               //self.timer.fire()
-
               // Add the timer to the current run loop.
               RunLoop.current.add(self.timer, forMode: RunLoop.Mode.default)
             }

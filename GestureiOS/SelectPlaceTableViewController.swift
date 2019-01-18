@@ -9,17 +9,16 @@
 import UIKit
 import MapKit
 
-
 class SelectPlaceTableViewController: UITableViewController {
     
     var search:MKLocalSearch? =  nil
     var searchCompleter = MKLocalSearchCompleter()
     var places = [MKLocalSearchCompletion]()
     var selectedPlace: MKMapItem? = nil
+    var placeName: String = ""
     var testString: String = "test"
     var momentVC: MomentViewController?
-    var delegate: isAbleToReceiveData?
-    
+    var delegate: isAbleToReceivePlace?
     
     func locationCount() -> Int {
         return places.count
@@ -37,34 +36,42 @@ class SelectPlaceTableViewController: UITableViewController {
     @IBAction func doneSelectPlace(_ sender: Any) {
         print("doneSelectPlace")
         print(selectedPlace)
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "LocationSelected"), object: nil)
+//        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "LocationSelected"), object: nil)
+        if let selectedPlace = selectedPlace {
+            self.delegate?.pass(data:selectedPlace)
+        }
         self.dismiss(animated: true, completion: nil)
     }
     
+    
     override func viewWillDisappear(_ animated: Bool) {
         print("view will dissapear")
-        self.delegate?.pass(data:selectedPlace!)
+        
     }
     
-    private var searchController:UISearchController = UISearchController()
+    var searchController:CustomSearchController = CustomSearchController()
     private let manager = CLLocationManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.delegate = self
         self.tableView.dataSource = self
+//        self.tableView.allowsSelection = true
         
         momentVC = self.presentingViewController?.presentingViewController as? MomentViewController
         
         searchCompleter.delegate = self
         
-        searchController =  UISearchController(searchResultsController:nil)
-        searchController.searchBar.sizeToFit()
-        searchController.searchBar.searchBarStyle = UISearchBar.Style.minimal
-        searchController.searchBar.delegate = self as UISearchBarDelegate
-        searchController.searchBar.showsCancelButton = false
+        
+        searchController = CustomSearchController(searchResultsController:nil)
         searchController.hidesNavigationBarDuringPresentation = false
+        searchController.searchBar.sizeToFit()
+        searchController.searchBar.showsCancelButton = false
+        searchController.searchBar.searchBarStyle = UISearchBar.Style.minimal
+//        searchController.searchBar.text = selectedPlace?.name
+        searchController.searchBar.text = self.placeName
         searchController.searchBar.setShowsCancelButton(false, animated: false)
+        searchController.searchBar.delegate = self
 //        searchController.searchBar.canc
         searchController.isActive = true
         tableView.tableHeaderView = searchController.searchBar
@@ -81,14 +88,11 @@ class SelectPlaceTableViewController: UITableViewController {
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        
         return 1
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         let count = locationCount()
-        
         return count
     }
     
@@ -98,12 +102,13 @@ class SelectPlaceTableViewController: UITableViewController {
         
         // Configure the cell...
         let item = locationAt(index: indexPath)
-        
         cell.textLabel?.text = item.title
-        
         cell.detailTextLabel?.text = item.subtitle
-        
         return cell
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        self.searchController.searchBar.showsCancelButton = true
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -117,14 +122,16 @@ class SelectPlaceTableViewController: UITableViewController {
             guard let response = response else {return}
             guard let item = response.mapItems.first else {return}
             self.selectedPlace = item
-            self.testString = "Barcelona"
             print(item)
-            print(self.momentVC?.location!)
-            self.momentVC?.location = item
+            print("bfr")
+//            print(self.momentVC?.location!)
+//            self.momentVC?.location = item
 //            self.delegate?.giveTest(s: self.testString)
             //            self.delegate?.setPlace(place: item)
             //            item.openInMaps(launchOptions: [MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving])
         }
+        self.searchController.isActive = false
+        self.searchController.dismiss(animated: true, completion: nil)
     }
 
     /*
@@ -212,5 +219,12 @@ extension SelectPlaceTableViewController:MKLocalSearchCompleterDelegate {
 extension SelectPlaceTableViewController:UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         searchCompleter.queryFragment = searchText
+    }
+}
+
+class CustomSearchController: UISearchController {
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        searchBar.showsCancelButton = false
     }
 }

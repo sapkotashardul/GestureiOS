@@ -10,8 +10,23 @@ import UIKit
 import CoreData
 import os.log
 
-class MomentsViewController: UITableViewController {
+protocol isAbleToReceiveMoment {
+    func pass(data:Moment)
+}
 
+class MomentsViewController: UITableViewController, isAbleToReceiveMoment {
+    
+    
+    var delegate: isAbleToReceiveMoment?
+    
+    func pass(data: Moment) {
+        print(data)
+    }
+    
+    
+    var moments: [Moment] = []
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -29,26 +44,35 @@ class MomentsViewController: UITableViewController {
 //        return 1
 //    }
 
-//    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        // #warning Incomplete implementation, return the number of rows
-//        return 1
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return moments.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        cell.textLabel?.text = moments[indexPath.row].name
+        return cell
+    }
+
+    
+//    @IBAction func saveMoment(_ segue: UIStoryboardSegue) {
+//
+//        self.moments.append(nameToSave)
+//        self.tableView.reloadData()
+//        present(alert, animated: true)
 //    }
-    
-    
-    @IBAction func cancelToPlacesViewController(_ segue: UIStoryboardSegue) {
-    }
-    
-    @IBAction func savePlaceDetail(_ segue: UIStoryboardSegue) {
-    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         super.prepare(for: segue, sender: sender)
-        
         switch(segue.identifier ?? "") {
-            
         case "AddMoment":
-            os_log("Adding a new moment.", log: OSLog.default, type: .debug)
+            print ("it is show modal")
+            let nav = segue.destination as! UINavigationController
+            let momentVC = nav.topViewController as! MomentViewController
+            momentVC.delegate = self
+//            momentVC.momentName = place
             
         case "EditMoment":
             guard let momentViewController = segue.destination as? MomentViewController else {
@@ -73,15 +97,6 @@ class MomentsViewController: UITableViewController {
         }
     }
 
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-         Configure the cell...
-
-        return cell
-    }
-    */
 
     /*
      Override to support conditional editing of the table view.
@@ -128,5 +143,5 @@ class MomentsViewController: UITableViewController {
     }
     */
 
-    
 }
+
