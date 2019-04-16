@@ -19,6 +19,8 @@ class MomentsViewController: UITableViewController, isAbleToReceiveMoment {
     var delegate: isAbleToReceiveMoment?
     var moments: [Moment] = []
     
+
+    
     func pass(moment: Moment) {
         print("Moments of success")
         print(moment)
@@ -56,7 +58,7 @@ class MomentsViewController: UITableViewController, isAbleToReceiveMoment {
     override func viewWillAppear(_ animated: Bool) {
         print("viewWillAppear")
         super.viewWillAppear(animated)
-        
+        self.tableView.reloadData()
         //1
         guard let appDelegate =
             UIApplication.shared.delegate as? AppDelegate else {
@@ -90,8 +92,38 @@ class MomentsViewController: UITableViewController, isAbleToReceiveMoment {
         return moments.count
     }
     
+    // Override to support conditional editing of the table view.
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        // Return false if you do not want the specified item to be editable.
+        return true
+    }
+    
+//    @IBAction func cancelToMomentsViewController(_ segue: UIStoryboardSegue) {
+//    }
+//    
+//    @IBAction func saveMomentDetail(_ segue: UIStoryboardSegue) {
+//        if let momentDetailsViewController = segue.source as? MomentViewController {
+//            if let moment = momentDetailsViewController.moment {
+//                
+//                if let selectedIndexPath = tableView.indexPathForSelectedRow {
+//                    // Update an existing gesture.
+//                    moments[selectedIndexPath.row] = moment
+//                    tableView.reloadRows(at: [selectedIndexPath], with: .none)
+//                }
+//                else {
+//                    // Add a new gesture.
+//                    let newIndexPath = IndexPath(row: moments.count, section: 0)
+//                    
+//                    moments.append(moment)
+//                    tableView.insertRows(at: [newIndexPath], with: .automatic)
+//                    self.tableView.reloadData()
+//                }
+//            }
+//        }
+//    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print(moments)
+//        print(moments)
         print(indexPath.row)
         let moment = moments[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
@@ -169,7 +201,7 @@ class MomentsViewController: UITableViewController, isAbleToReceiveMoment {
             }
             
             let selectedMoment = moments[indexPath.row]
-            momentViewController.momentEdit = selectedMoment
+            momentViewController.moment = selectedMoment
             
         default:
             fatalError("Unexpected Segue Identifier; \(segue.identifier)")

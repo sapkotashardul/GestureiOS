@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="hD1-pW-aQP">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="hD1-pW-aQP">
     <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -319,11 +319,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" textLabel="x9J-aV-BOF" detailTextLabel="j7M-3E-b6s" style="IBUITableViewCellStyleSubtitle" id="kvq-jk-v7H" customClass="MomentTableViewCell" customModule="GestureiOS" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="cell" textLabel="x9J-aV-BOF" detailTextLabel="j7M-3E-b6s" style="IBUITableViewCellStyleSubtitle" id="kvq-jk-v7H" customClass="MomentTableViewCell" customModule="GestureiOS" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="kvq-jk-v7H" id="bIY-HO-We6">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.666666666666664"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="341" height="43.666666666666664"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="x9J-aV-BOF">
@@ -343,7 +343,7 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="Hxv-yR-NR0" kind="show" identifier="EditMoment" id="10K-Zv-6Vi"/>
+                                    <segue destination="Hxv-yR-NR0" kind="show" identifier="EditMoment" id="p1a-D0-xNt"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -530,7 +530,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Done" id="eUT-su-ZJO">
                             <connections>
-                                <action selector="doneAddMoment:" destination="Hxv-yR-NR0" id="qDo-G6-xMx"/>
+                                <action selector="doneAddMoment:" destination="Hxv-yR-NR0" id="ev2-Uy-sSG"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -823,7 +823,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="10K-Zv-6Vi"/>
+        <segue reference="p1a-D0-xNt"/>
         <segue reference="q6P-BC-Tek"/>
     </inferredMetricsTieBreakers>
 </document>

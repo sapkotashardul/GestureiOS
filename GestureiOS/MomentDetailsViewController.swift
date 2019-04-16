@@ -19,7 +19,9 @@ protocol isAbleToReceivePlace {
 
 class MomentViewController: UITableViewController, MKMapViewDelegate, CLLocationManagerDelegate, UISearchBarDelegate, isAbleToReceivePlace  {
     
+    var moment: Moment?
     var delegate: isAbleToReceiveMoment?
+    var flag = true
     // MARK: - Outlets
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -38,9 +40,21 @@ class MomentViewController: UITableViewController, MKMapViewDelegate, CLLocation
         super.viewDidLoad()
 //        self.initMap()
         self.locateMe()
-        if momentEdit != nil { return }
+//        if momentEdit != nil { return }
 //        textfieldName.text = momentEdit.name
 //        datePicker.date = momentEdit.time ?? Date()
+        print("Inside view didload")
+     // loading from coreData
+        
+        textfieldName.delegate = self as? UITextFieldDelegate
+        
+        if let moment = moment{
+            print(" Inside existing moment")
+            textfieldName.text = moment.name
+            datePicker.date = moment.time ?? Date()
+            cellPlace.textLabel?.text = moment.place
+            self.flag = false
+        }
         
     }
     
@@ -53,7 +67,7 @@ class MomentViewController: UITableViewController, MKMapViewDelegate, CLLocation
     }
     
     var timeEnabled: Bool = true
-    var personEnabled: Bool = true
+    var personEnabled: Bool = false
     var placeEnabled: Bool = true
     
     @IBAction func cancelAddMoment(_ sender: UIBarButtonItem) {
@@ -78,33 +92,50 @@ class MomentViewController: UITableViewController, MKMapViewDelegate, CLLocation
         // 1
         let managedContext = appDelegate.persistentContainer.viewContext
         
+        if self.flag{
+        
         // 2
         let entity = NSEntityDescription.entity(forEntityName: "Moment", in: managedContext)!
-        let moment = NSManagedObject(entity: entity, insertInto: managedContext)
+        self.moment = Moment(entity: entity, insertInto: managedContext)
         
         // 3
-        moment.setValue(momentName, forKeyPath: "name")
-        moment.setValue(momentTime, forKeyPath: "time")
-        moment.setValue(momentPerson, forKey: "person")
-        moment.setValue(placeName, forKey: "place")
-        moment.setValue(coordinates.longitude, forKey: "lon")
-        moment.setValue(coordinates.latitude, forKey: "lat")
-        
+        self.moment?.setValue(momentName, forKeyPath: "name")
+        self.moment?.setValue(momentTime, forKeyPath: "time")
+        self.moment?.setValue(momentPerson, forKey: "person")
+        self.moment?.setValue(placeName, forKey: "place")
+        self.moment?.setValue(coordinates.longitude, forKey: "lon")
+        self.moment?.setValue(coordinates.latitude, forKey: "lat")
+
+//        self.delegate?.pass(moment:moment as! Moment)
+            
+        } else{
+            if let id = self.moment?.objectID{
+                do{
+                    try self.moment = managedContext.existingObject(with: id) as? Moment
+                    self.moment?.setValue(momentName, forKeyPath: "name")
+                    self.moment?.setValue(momentTime, forKeyPath: "time")
+                    self.moment?.setValue(momentPerson, forKey: "person")
+                    self.moment?.setValue(placeName, forKey: "place")
+                    self.moment?.setValue(coordinates.longitude, forKey: "lon")
+                    self.moment?.setValue(coordinates.latitude, forKey: "lat")
+                    self.delegate?.pass(moment:self.moment as! Moment)
+//                    self.delegate?.pass(moment:(self.moment)!)
+                }catch{
+                    print("Error loading and editing existing CoreData object")
+                }
+            }
+        }
         // 4
         do {
             try managedContext.save()
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
         }
-
-        print(moment)
-
-//        moment = Moment(name: String, time: Date, person: String, place: Place)
-        self.delegate?.pass(moment:moment as! Moment)
-        print("before dismiss")
+        
+         self.delegate?.pass(moment:self.moment as! Moment)
+        self.navigationController?.popViewController(animated: true)
         self.dismiss(animated: true, completion: nil)
-        print("before after")
-    }
+}
     
     @IBAction func didToggleSwitch(_ sender: UISwitch) {
         let id: String = sender.restorationIdentifier!
