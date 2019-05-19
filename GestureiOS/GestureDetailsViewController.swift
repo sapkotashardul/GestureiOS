@@ -2,7 +2,7 @@
 //  GestureDetailsViewController.swift
 //  GestureiOS
 //
-//  Created by fluid on 11/8/18.
+//  Created by shardul sapkota on 11/8/18.
 //  Copyright © 2018 fluid. All rights reserved.
 //
 
@@ -304,7 +304,6 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate, 
               })
                 
               //self.timer.fire()
-
               // Add the timer to the current run loop.
               RunLoop.current.add(self.timer, forMode: RunLoop.Mode.default)
             }
@@ -327,7 +326,9 @@ class GestureDetailsViewController: UITableViewController, UITextFieldDelegate, 
     @IBAction func unwindWithSelectedSensor(segue: UIStoryboardSegue) {
         if let sensorPickerViewController = segue.source as? SensorPickerViewController,
             let selectedSensor = sensorPickerViewController.selectedSensor {
+            print("herererere")
             sensor = selectedSensor
+            print(sensor)
         }
     }
     

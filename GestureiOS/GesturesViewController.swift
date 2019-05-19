@@ -24,7 +24,6 @@ class GesturesViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
        navigationItem.leftBarButtonItem = editButtonItem
-  
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -155,7 +154,7 @@ class GesturesViewController: UITableViewController {
             
             
         }
-}
+    }
     
     @IBAction func cancelToGesturesViewController(_ segue: UIStoryboardSegue) {
     }

@@ -1,18 +1,18 @@
 //
-//  GestureTableViewCell.swift
+//  PlaceTableViewCell.swift
 //  GestureiOS
 //
-//  Created by fluid on 11/10/18.
-//  Copyright © 2018 fluid. All rights reserved.
+//  Created by Tomás Vega on 1/14/19.
+//  Copyright © 2019 fluid. All rights reserved.
 //
 
 import UIKit
 
-class GestureTableViewCell: UITableViewCell {
+class PlaceTableViewCell: UITableViewCell {
 
     @IBOutlet weak var nameLabel: UILabel!
     
-    @IBOutlet weak var sensorLabel: UILabel!
+    @IBOutlet weak var notesLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
